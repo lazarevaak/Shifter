@@ -2,6 +2,32 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
+    
+    <!-- Ключи для доступа к камере и фотогалерее -->
+    <key>NSCameraUsageDescription</key>
+	<string>Мы используем камеру, чтобы вы могли установить аватарку</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Доступ к фотогалерее необходим для выбора аватарки</string>
+    
+    <!-- Ключ для API OpenRouter -->
+    <key>OpenRouterAPIKey</key>
+    <string>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</string>
+    
+    <!-- Регистрация кастомной URL-схемы -->
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>com.yourcompany.myapp</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>myapp</string>
+            </array>
+        </dict>
+    </array>
+    
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -15,8 +41,6 @@
 					<string>Default Configuration</string>
 					<key>UISceneDelegateClassName</key>
 					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
-					<key>UISceneStoryboardFile</key>
-					<string>Main</string>
 				</dict>
 			</array>
 		</dict>

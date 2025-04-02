@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		A8A2561C2D8F515B00FCE74F /* shifter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shifter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A8B55F8B2D975342003AD04D /* shifter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = shifter.app; path = "/Users/macboock/Desktop/КУРСАЧ/shifter/build/Debug-iphoneos/shifter.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -46,16 +46,7 @@
 			isa = PBXGroup;
 			children = (
 				A8A2561E2D8F515B00FCE74F /* shifter */,
-				A8A2561D2D8F515B00FCE74F /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		A8A2561D2D8F515B00FCE74F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A8A2561C2D8F515B00FCE74F /* shifter.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -80,7 +71,7 @@
 			packageProductDependencies = (
 			);
 			productName = shifter;
-			productReference = A8A2561C2D8F515B00FCE74F /* shifter.app */;
+			productReference = A8B55F8B2D975342003AD04D /* shifter.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -108,7 +99,7 @@
 			mainGroup = A8A256132D8F515B00FCE74F;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = A8A2561D2D8F515B00FCE74F /* Products */;
+			productRefGroup = A8A256132D8F515B00FCE74F;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -145,11 +136,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 987W38BN4H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = shifter/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -172,11 +163,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 987W38BN4H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = shifter/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

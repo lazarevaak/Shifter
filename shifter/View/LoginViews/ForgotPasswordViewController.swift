@@ -6,18 +6,6 @@ final class ForgotPasswordViewController: UIViewController, ForgotPasswordDispla
     var interactor: ForgotPasswordBusinessLogic?
     var router: ForgotPasswordRoutingLogic?
     
-    // MARK: - Layout Constants
-    private enum LayoutConstants {
-        static let titleTopOffset: CGFloat = 40
-        static let sideOffset: CGFloat = 32
-        static let instructionLabelTop: CGFloat = 35
-        static let emailTextFieldTop: CGFloat = 5
-        static let sendCodeButtonTop: CGFloat = 35
-        static let underlineHeight: CGFloat = 1
-        static let textFieldHeight: CGFloat = 44
-        static let buttonCornerRadius: CGFloat = 8
-    }
-    
     // MARK: - UI Elements
     
     private let titleLabel: UILabel = {
@@ -50,7 +38,7 @@ final class ForgotPasswordViewController: UIViewController, ForgotPasswordDispla
     
     private let textFieldUnderline: UIView = {
         let view = UIView()
-        view.backgroundColor = ColorsLayoutConstants.additionalColor
+        view.backgroundColor = ColorsLayoutConstants.linesColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -58,10 +46,10 @@ final class ForgotPasswordViewController: UIViewController, ForgotPasswordDispla
     private let sendCodeButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Send the code", for: .normal)
-        btn.backgroundColor = .systemGray4
-        btn.setTitleColor(ColorsLayoutConstants.buttonTextbackgroundColor, for: .normal)
+        btn.backgroundColor = ColorsLayoutConstants.buttonColor
+        btn.setTitleColor(ColorsLayoutConstants.buttonTextColor, for: .normal)
         btn.titleLabel?.font = UIFont.systemFont(ofSize: SizeLayoutConstants.buttonFontSize, weight: .semibold)
-        btn.layer.cornerRadius = LayoutConstants.buttonCornerRadius
+        btn.layer.cornerRadius = ForgotPasswordConstants.buttonCornerRadius
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
@@ -70,7 +58,7 @@ final class ForgotPasswordViewController: UIViewController, ForgotPasswordDispla
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = ColorsLayoutConstants.buttonTextbackgroundColor
+        view.backgroundColor = ColorsLayoutConstants.backgroundColor
         navigationItem.title = ""
         navigationItem.hidesBackButton = true
         
@@ -120,29 +108,28 @@ final class ForgotPasswordViewController: UIViewController, ForgotPasswordDispla
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            // Заголовок
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: LayoutConstants.titleTopOffset),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: LayoutConstants.sideOffset),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -LayoutConstants.sideOffset),
-            // Инструкция
-            instructionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: LayoutConstants.instructionLabelTop),
-            instructionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: LayoutConstants.sideOffset),
-            instructionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -LayoutConstants.sideOffset),
-            // Email TextField
-            emailTextField.topAnchor.constraint(equalTo: instructionLabel.bottomAnchor, constant: LayoutConstants.emailTextFieldTop),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ForgotPasswordConstants.titleTopOffset),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ForgotPasswordConstants.sideOffset),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -ForgotPasswordConstants.sideOffset),
+
+            instructionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: ForgotPasswordConstants.instructionLabelTop),
+            instructionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ForgotPasswordConstants.sideOffset),
+            instructionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -ForgotPasswordConstants.sideOffset),
+
+            emailTextField.topAnchor.constraint(equalTo: instructionLabel.bottomAnchor, constant: ForgotPasswordConstants.emailTextFieldTop),
             emailTextField.leadingAnchor.constraint(equalTo: instructionLabel.leadingAnchor),
             emailTextField.trailingAnchor.constraint(equalTo: instructionLabel.trailingAnchor),
-            emailTextField.heightAnchor.constraint(equalToConstant: LayoutConstants.textFieldHeight),
-            // Underline
+            emailTextField.heightAnchor.constraint(equalToConstant: ForgotPasswordConstants.textFieldHeight),
+
             textFieldUnderline.topAnchor.constraint(equalTo: emailTextField.bottomAnchor),
             textFieldUnderline.leadingAnchor.constraint(equalTo: emailTextField.leadingAnchor),
             textFieldUnderline.trailingAnchor.constraint(equalTo: emailTextField.trailingAnchor),
-            textFieldUnderline.heightAnchor.constraint(equalToConstant: LayoutConstants.underlineHeight),
-            // Кнопка "Send the code"
-            sendCodeButton.topAnchor.constraint(equalTo: textFieldUnderline.bottomAnchor, constant: LayoutConstants.sendCodeButtonTop),
+            textFieldUnderline.heightAnchor.constraint(equalToConstant: ForgotPasswordConstants.underlineHeight),
+  
+            sendCodeButton.topAnchor.constraint(equalTo: textFieldUnderline.bottomAnchor, constant: ForgotPasswordConstants.sendCodeButtonTop),
             sendCodeButton.leadingAnchor.constraint(equalTo: emailTextField.leadingAnchor),
             sendCodeButton.trailingAnchor.constraint(equalTo: emailTextField.trailingAnchor),
-            sendCodeButton.heightAnchor.constraint(equalToConstant: LayoutConstants.textFieldHeight)
+            sendCodeButton.heightAnchor.constraint(equalToConstant: ForgotPasswordConstants.textFieldHeight)
         ])
     }
     
@@ -170,7 +157,7 @@ final class ForgotPasswordViewController: UIViewController, ForgotPasswordDispla
     // MARK: - ForgotPasswordDisplayLogic
     
     func displayForgotPassword(viewModel: ForgotPassword.ViewModel) {
-        showAlert(message: viewModel.message, title: viewModel.success ? "Success" : "Error") {
+        showAlert(message: viewModel.message, title: viewModel.success ? "success_alert_title".localized : "error_alert_title".localized) {
             if viewModel.success, let email = self.emailTextField.text {
                 self.router?.routeToResetPassword(with: email)
             }
@@ -178,7 +165,6 @@ final class ForgotPasswordViewController: UIViewController, ForgotPasswordDispla
     }
     
     // MARK: - Alert Helper
-    
     private func showAlert(message: String, title: String = "Внимание", completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default) { _ in completion?() }

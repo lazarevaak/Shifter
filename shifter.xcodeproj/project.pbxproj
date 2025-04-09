@@ -6,8 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A874C47D2DA0953100FAC206 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = A874C47C2DA0953100FAC206 /* ZIPFoundation */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		A8B55F8B2D975342003AD04D /* shifter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = shifter.app; path = "/Users/macboock/Desktop/КУРСАЧ/shifter/build/Debug-iphoneos/shifter.app"; sourceTree = "<absolute>"; };
+		A8B55FC52D9D53DC003AD04D /* shifter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shifter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A874C47D2DA0953100FAC206 /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +51,7 @@
 			isa = PBXGroup;
 			children = (
 				A8A2561E2D8F515B00FCE74F /* shifter */,
+				A8B55FC52D9D53DC003AD04D /* shifter.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -69,9 +75,10 @@
 			);
 			name = shifter;
 			packageProductDependencies = (
+				A874C47C2DA0953100FAC206 /* ZIPFoundation */,
 			);
 			productName = shifter;
-			productReference = A8B55F8B2D975342003AD04D /* shifter.app */;
+			productReference = A8B55FC52D9D53DC003AD04D /* shifter.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -95,9 +102,13 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = A8A256132D8F515B00FCE74F;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A874C47B2DA0953100FAC206 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A8A256132D8F515B00FCE74F;
 			projectDirPath = "";
@@ -139,10 +150,16 @@
 				DEVELOPMENT_TEAM = 987W38BN4H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = shifter/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = shifter;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Мы используем камеру, чтобы вы могли установить аватарку";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Доступ к фотогалерее необходим для выбора аватарки";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -166,10 +183,16 @@
 				DEVELOPMENT_TEAM = 987W38BN4H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = shifter/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = shifter;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Мы используем камеру, чтобы вы могли установить аватарку";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Доступ к фотогалерее необходим для выбора аватарки";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -188,6 +211,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -251,6 +275,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -324,6 +349,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A874C47B2DA0953100FAC206 /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/weichsel/ZIPFoundation.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.19;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A874C47C2DA0953100FAC206 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A874C47B2DA0953100FAC206 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A8A256142D8F515B00FCE74F /* Project object */;
 }

@@ -1,113 +1,145 @@
 import UIKit
+import CoreData
+import OSLog
+import Foundation
 
-// MARK: - Протокол делегата для кастомного экрана редактирования карточки
-protocol EditCardViewControllerDelegate: AnyObject {
-    func editCardViewController(_ controller: EditCardViewController, didUpdateCard card: Card)
-}
+// MARK: - View Controller
 
-// MARK: - Кастомный экран редактирования карточки (выезжает снизу)
-class EditCardViewController: UIViewController {
-    weak var delegate: EditCardViewControllerDelegate?
-    var card: Card
+final class EditCardViewController: UIViewController, EditCardDisplayLogic {
 
-    private let questionTextField: UITextField = {
-        let tf = UITextField()
-        tf.placeholder = "Question"
-        tf.borderStyle = .roundedRect
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        return tf
+    // MARK: - VIP Components
+
+    var interactor: EditCardBusinessLogic?
+    var router: EditCardRoutingLogic?
+
+    // MARK: - Data
+
+    private var card: Card
+
+    // MARK: - UI Elements
+
+    private lazy var questionTextView: UITextView = {
+        let tv = UITextView()
+        tv.text = "question_label".localized
+        tv.font = UIFont.systemFont(ofSize: SizeLayoutConstants.textFieldFontSize)
+        tv.layer.borderColor = ColorsLayoutConstants.linesColor.cgColor
+        tv.layer.borderWidth = 1
+        tv.layer.cornerRadius = EditCardLayoutConstants.cornerRadius
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        return tv
     }()
 
-    private let answerTextField: UITextField = {
-        let tf = UITextField()
-        tf.placeholder = "Answer"
-        tf.borderStyle = .roundedRect
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        return tf
+    private lazy var answerTextView: UITextView = {
+        let tv = UITextView()
+        tv.text = "answer_label".localized
+        tv.font = UIFont.systemFont(ofSize: SizeLayoutConstants.textFieldFontSize)
+        tv.layer.borderColor = ColorsLayoutConstants.linesColor.cgColor
+        tv.layer.borderWidth = 1
+        tv.layer.cornerRadius = EditCardLayoutConstants.cornerRadius
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        return tv
     }()
 
     private let saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Save", for: .normal)
-        button.setTitleColor(ColorsLayoutConstants.basicColor, for: .normal)
+        button.setTitle("save_button_title".localized, for: .normal)
+        button.backgroundColor = ColorsLayoutConstants.basicColor
+        button.setTitleColor(ColorsLayoutConstants.buttonTextColor, for: .normal)
+        button.layer.cornerRadius = EditCardLayoutConstants.cornerRadius
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
-    private let cancelButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Cancel", for: .normal)
-        button.setTitleColor(ColorsLayoutConstants.additionalColor, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    // MARK: - Initialization
 
     init(card: Card) {
         self.card = card
         super.init(nibName: nil, bundle: nil)
     }
+
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) not implemented")
+        fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-
-        if let sheet = self.sheetPresentationController {
-            if #available(iOS 16.0, *) {
-                let customIdentifier = UISheetPresentationController.Detent.Identifier("custom")
-                sheet.detents = [.custom(identifier: customIdentifier, resolver: { context in
-                    return context.maximumDetentValue * 0.48
-                })]
-            } else {
-                self.preferredContentSize = CGSize(width: view.bounds.width, height: 200)
-                sheet.detents = [.medium()]
-            }
-            sheet.prefersGrabberVisible = true
-        }
-
-        questionTextField.text = card.question
-        answerTextField.text = card.answer
-
-        saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
-        cancelButton.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside)
-
+        view.backgroundColor = ColorsLayoutConstants.backgroundColor
+        setupModule()
         setupLayout()
+        setupActions()
+        populateFields()
+    }
+
+    // MARK: - Setup
+
+    private func setupModule() {
+        let interactor = EditCardInteractor(card: card)
+        let presenter = EditCardPresenter()
+        let router = EditCardRouter()
+
+        self.interactor = interactor
+        self.router = router
+
+        interactor.presenter = presenter
+        presenter.viewController = self
+        router.viewController = self
     }
 
     private func setupLayout() {
-        view.addSubview(questionTextField)
-        view.addSubview(answerTextField)
+        view.addSubview(questionTextView)
+        view.addSubview(answerTextView)
         view.addSubview(saveButton)
-        view.addSubview(cancelButton)
 
         NSLayoutConstraint.activate([
-            questionTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
-            questionTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            questionTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            
-            answerTextField.topAnchor.constraint(equalTo: questionTextField.bottomAnchor, constant: 20),
-            answerTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            answerTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            
-            saveButton.topAnchor.constraint(equalTo: answerTextField.bottomAnchor, constant: 20),
-            saveButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            cancelButton.topAnchor.constraint(equalTo: saveButton.bottomAnchor, constant: 10),
-            cancelButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            questionTextView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
+                                                  constant: EditCardLayoutConstants.verticalSpacing),
+            questionTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                      constant: EditCardLayoutConstants.horizontalInset),
+            questionTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                       constant: -EditCardLayoutConstants.horizontalInset),
+            questionTextView.heightAnchor.constraint(equalToConstant: EditCardLayoutConstants.textViewHeight),
+
+            answerTextView.topAnchor.constraint(equalTo: questionTextView.bottomAnchor,
+                                                constant: EditCardLayoutConstants.verticalSpacing),
+            answerTextView.leadingAnchor.constraint(equalTo: questionTextView.leadingAnchor),
+            answerTextView.trailingAnchor.constraint(equalTo: questionTextView.trailingAnchor),
+            answerTextView.heightAnchor.constraint(equalToConstant: EditCardLayoutConstants.textViewHeight),
+
+            saveButton.topAnchor.constraint(equalTo: answerTextView.bottomAnchor,
+                                            constant: EditCardLayoutConstants.verticalSpacing),
+            saveButton.leadingAnchor.constraint(equalTo: answerTextView.leadingAnchor),
+            saveButton.trailingAnchor.constraint(equalTo: answerTextView.trailingAnchor),
+            saveButton.heightAnchor.constraint(equalToConstant: EditCardLayoutConstants.buttonHeight),
         ])
     }
 
-    @objc private func saveTapped() {
-        card.question = questionTextField.text
-        card.answer = answerTextField.text
-        delegate?.editCardViewController(self, didUpdateCard: card)
-        dismiss(animated: true, completion: nil)
+    private func setupActions() {
+        saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
     }
 
-    @objc private func cancelTapped() {
-        dismiss(animated: true, completion: nil)
+    private func populateFields() {
+        questionTextView.text = card.question
+        answerTextView.text = card.answer
+    }
+
+    // MARK: - User Actions
+
+    @objc private func saveTapped() {
+        let newQuestion = questionTextView.text ?? ""
+        let newAnswer = answerTextView.text ?? ""
+
+        let request = EditCard.UpdateCard.Request(
+            question: newQuestion,
+            answer: newAnswer
+        )
+        interactor?.updateCard(request: request)
+    }
+
+    // MARK: - Display Logic
+
+    func displayUpdatedCard(viewModel: EditCard.UpdateCard.ViewModel) {
+        router?.routeToPreviousScreen()
     }
 }
-

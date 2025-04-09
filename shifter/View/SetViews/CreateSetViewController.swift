@@ -1,10 +1,6 @@
 import UIKit
 import CoreData
 
-protocol CreateSetDisplayLogic: AnyObject {
-    func displayCreateSet(viewModel: CreateSet.ViewModel)
-}
-
 final class CreateSetViewController: UIViewController, CreateSetDisplayLogic {
     
     // MARK: - Clean Swift Components
@@ -15,16 +11,6 @@ final class CreateSetViewController: UIViewController, CreateSetDisplayLogic {
     private let closeButton: UIButton = {
         let button = UIButton(type: .system)
         let image = UIImage(systemName: "xmark")?
-            .withRenderingMode(.alwaysOriginal)
-            .withTintColor(ColorsLayoutConstants.basicColor)
-        button.setImage(image, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    private let settingsButton: UIButton = {
-        let button = UIButton(type: .system)
-        let image = UIImage(systemName: "gearshape")?
             .withRenderingMode(.alwaysOriginal)
             .withTintColor(ColorsLayoutConstants.basicColor)
         button.setImage(image, for: .normal)
@@ -44,7 +30,7 @@ final class CreateSetViewController: UIViewController, CreateSetDisplayLogic {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Creating a set"
+        label.text = "сreatingset_label".localized
         label.font = UIFont.boldSystemFont(ofSize: SizeLayoutConstants.titleFontSize)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -53,9 +39,9 @@ final class CreateSetViewController: UIViewController, CreateSetDisplayLogic {
     
     private let nameOfSetLabel: UILabel = {
         let label = UILabel()
-        label.text = "Name of set"
+        label.text = "nameset_label".localized
         label.textColor = ColorsLayoutConstants.basicColor
-        label.font = UIFont.systemFont(ofSize: LayoutConstants.labelFontSizeMedium, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: CreateSetConstants.labelFontSizeMedium, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -65,18 +51,18 @@ final class CreateSetViewController: UIViewController, CreateSetDisplayLogic {
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.borderStyle = .none
         tf.attributedPlaceholder = NSAttributedString(
-            string: "Name",
-            attributes: [.foregroundColor: ColorsLayoutConstants.additionalColor]
+            string: "name_label".localized,
+            attributes: [.foregroundColor: ColorsLayoutConstants.linesColor]
         )
-        tf.font = UIFont.systemFont(ofSize: LayoutConstants.textFieldFontSize)
+        tf.font = UIFont.systemFont(ofSize: CreateSetConstants.textFieldFontSize)
         return tf
     }()
     
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "Description of set"
+        label.text = "descriptionset_label".localized
         label.textColor = ColorsLayoutConstants.basicColor
-        label.font = UIFont.systemFont(ofSize: LayoutConstants.labelFontSizeMedium, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: CreateSetConstants.labelFontSizeMedium, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -86,52 +72,38 @@ final class CreateSetViewController: UIViewController, CreateSetDisplayLogic {
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.borderStyle = .none
         tf.attributedPlaceholder = NSAttributedString(
-            string: "Description",
-            attributes: [.foregroundColor: ColorsLayoutConstants.additionalColor]
+            string: "description_label".localized,
+            attributes: [.foregroundColor: ColorsLayoutConstants.linesColor]
         )
-        tf.font = UIFont.systemFont(ofSize: LayoutConstants.textFieldFontSize)
+        tf.font = UIFont.systemFont(ofSize: CreateSetConstants.textFieldFontSize)
         return tf
     }()
     
     private let textOfSetLabel: UILabel = {
         let label = UILabel()
-        label.text = "Text of set"
+        label.text = "textset_label".localized
         label.textColor = ColorsLayoutConstants.basicColor
-        label.font = UIFont.systemFont(ofSize: LayoutConstants.labelFontSizeMedium, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: CreateSetConstants.labelFontSizeMedium, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let textOfSetTextView: UITextView = {
         let tv = UITextView()
-        tv.font = UIFont.systemFont(ofSize: LayoutConstants.textViewFontSize)
-        tv.layer.borderWidth = LayoutConstants.textViewBorderWidth
-        tv.layer.borderColor = ColorsLayoutConstants.additionalColor.cgColor
+        tv.font = UIFont.systemFont(ofSize: CreateSetConstants.textViewFontSize)
+        tv.layer.borderWidth = CreateSetConstants.textViewBorderWidth
+        tv.layer.borderColor = ColorsLayoutConstants.linesColor.cgColor
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
     
-    // MARK: - Layout Constants
-    private enum LayoutConstants {
-        static let topStackViewTop: CGFloat = 10
-        static let topStackViewSide: CGFloat = 16
-        static let fieldsStackViewTop: CGFloat = 45
-        static let fieldsStackViewSide: CGFloat = 25
-        static let textViewHeight: CGFloat = 300
-        static let textFieldBottomLineHeight: CGFloat = 1
-        static let stackViewRowSpacing: CGFloat = 10
-        static let fieldsStackViewSpacing: CGFloat = 25
-        static let textViewBorderWidth: CGFloat = 1
-        
-        static let labelFontSizeMedium: CGFloat = 14
-        static let textFieldFontSize: CGFloat = 16
-        static let textViewFontSize: CGFloat = 16
-    }
-    
-    // MARK: - Текущий пользователь
+    // MARK: - Current User
     private let currentUser: User
     
-    // MARK: - Инициализатор
+    // MARK: - Loading Screen
+    private var loadingVC: LoadingViewController?
+    
+    // MARK: - Initializer
     init(currentUser: User) {
         self.currentUser = currentUser
         super.init(nibName: nil, bundle: nil)
@@ -141,18 +113,19 @@ final class CreateSetViewController: UIViewController, CreateSetDisplayLogic {
         fatalError("init(coder:) not implemented")
     }
     
-    // MARK: - Жизненный цикл
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = ColorsLayoutConstants.buttonTextbackgroundColor
+        view.backgroundColor = ColorsLayoutConstants.backgroundColor
         
         setupUI()
         setupLayout()
-        
         setupModule()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateLocalizedTexts), name: Notification.Name("LanguageDidChange"), object: nil)
     }
     
-    // MARK: - VIP Setup
+    // MARK: - Module Setup (VIP)
     private func setupModule() {
         let interactor = CreateSetInteractor(currentUser: currentUser)
         let presenter = CreateSetPresenter()
@@ -169,7 +142,6 @@ final class CreateSetViewController: UIViewController, CreateSetDisplayLogic {
     // MARK: - UI Setup
     private func setupUI() {
         closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
-        settingsButton.addTarget(self, action: #selector(settingsTapped), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
         
         addBottomBorder(to: nameOfSetTextField)
@@ -178,7 +150,7 @@ final class CreateSetViewController: UIViewController, CreateSetDisplayLogic {
     
     private func addBottomBorder(to textField: UITextField) {
         let bottomLine = UIView()
-        bottomLine.backgroundColor = ColorsLayoutConstants.additionalColor
+        bottomLine.backgroundColor = ColorsLayoutConstants.linesColor
         bottomLine.translatesAutoresizingMaskIntoConstraints = false
         textField.addSubview(bottomLine)
         
@@ -186,15 +158,15 @@ final class CreateSetViewController: UIViewController, CreateSetDisplayLogic {
             bottomLine.leadingAnchor.constraint(equalTo: textField.leadingAnchor),
             bottomLine.trailingAnchor.constraint(equalTo: textField.trailingAnchor),
             bottomLine.bottomAnchor.constraint(equalTo: textField.bottomAnchor),
-            bottomLine.heightAnchor.constraint(equalToConstant: LayoutConstants.textFieldBottomLineHeight)
+            bottomLine.heightAnchor.constraint(equalToConstant: CreateSetConstants.textFieldBottomLineHeight)
         ])
     }
     
     private func setupLayout() {
-        let rightStackView = UIStackView(arrangedSubviews: [settingsButton, saveButton])
+        let rightStackView = UIStackView(arrangedSubviews: [saveButton])
         rightStackView.axis = .horizontal
         rightStackView.alignment = .center
-        rightStackView.spacing = LayoutConstants.stackViewRowSpacing
+        rightStackView.spacing = CreateSetConstants.stackViewRowSpacing
         rightStackView.translatesAutoresizingMaskIntoConstraints = false
         
         let topStackView = UIStackView(arrangedSubviews: [closeButton, titleLabel, rightStackView])
@@ -206,32 +178,32 @@ final class CreateSetViewController: UIViewController, CreateSetDisplayLogic {
         
         let row1 = UIStackView(arrangedSubviews: [nameOfSetLabel, nameOfSetTextField])
         row1.axis = .vertical
-        row1.spacing = LayoutConstants.stackViewRowSpacing
+        row1.spacing = CreateSetConstants.stackViewRowSpacing
         
         let row2 = UIStackView(arrangedSubviews: [descriptionLabel, descriptionTextField])
         row2.axis = .vertical
-        row2.spacing = LayoutConstants.stackViewRowSpacing
+        row2.spacing = CreateSetConstants.stackViewRowSpacing
         
         let row3 = UIStackView(arrangedSubviews: [textOfSetLabel, textOfSetTextView])
         row3.axis = .vertical
-        row3.spacing = LayoutConstants.stackViewRowSpacing
+        row3.spacing = CreateSetConstants.stackViewRowSpacing
         
         let fieldsStackView = UIStackView(arrangedSubviews: [row1, row2, row3])
         fieldsStackView.axis = .vertical
-        fieldsStackView.spacing = LayoutConstants.fieldsStackViewSpacing
+        fieldsStackView.spacing = CreateSetConstants.fieldsStackViewSpacing
         fieldsStackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(fieldsStackView)
         
         NSLayoutConstraint.activate([
-            topStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: LayoutConstants.topStackViewTop),
-            topStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: LayoutConstants.topStackViewSide),
-            topStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -LayoutConstants.topStackViewSide),
+            topStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: CreateSetConstants.topStackViewTop),
+            topStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CreateSetConstants.topStackViewSide),
+            topStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -CreateSetConstants.topStackViewSide),
             
-            fieldsStackView.topAnchor.constraint(equalTo: topStackView.bottomAnchor, constant: LayoutConstants.fieldsStackViewTop),
-            fieldsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: LayoutConstants.fieldsStackViewSide),
-            fieldsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -LayoutConstants.fieldsStackViewSide),
+            fieldsStackView.topAnchor.constraint(equalTo: topStackView.bottomAnchor, constant: CreateSetConstants.fieldsStackViewTop),
+            fieldsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CreateSetConstants.fieldsStackViewSide),
+            fieldsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -CreateSetConstants.fieldsStackViewSide),
             
-            textOfSetTextView.heightAnchor.constraint(equalToConstant: LayoutConstants.textViewHeight)
+            textOfSetTextView.heightAnchor.constraint(equalToConstant: CreateSetConstants.textViewHeight)
         ])
     }
     
@@ -240,32 +212,67 @@ final class CreateSetViewController: UIViewController, CreateSetDisplayLogic {
         dismiss(animated: true, completion: nil)
     }
     
-    @objc private func settingsTapped() {
-        let setActVC = SetActViewController()
-        setActVC.modalPresentationStyle = .fullScreen
-        present(setActVC, animated: true, completion: nil)
-    }
-    
     @objc private func saveTapped() {
         let nameOfSet = nameOfSetTextField.text ?? ""
         let desc = descriptionTextField.text ?? ""
         let textOfSet = textOfSetTextView.text ?? ""
         
         let request = CreateSet.Request(name: nameOfSet, description: desc, text: textOfSet)
+        showLoading()
         interactor?.createSet(request: request)
     }
     
-    // MARK: - CreateSetDisplayLogic
-    func displayCreateSet(viewModel: CreateSet.ViewModel) {
-        if viewModel.message == "Set created successfully!" {
-            router?.routeToProfile(with: currentUser)
-        } else {
-            showAlert(message: viewModel.message)
-        }
+    @objc private func updateLocalizedTexts() {
+        titleLabel.text = "сreatingset_label".localized
+        nameOfSetLabel.text = "nameset_label".localized
+        nameOfSetTextField.attributedPlaceholder = NSAttributedString(
+            string: "name_label".localized,
+            attributes: [.foregroundColor: ColorsLayoutConstants.linesColor]
+        )
+        descriptionLabel.text = "descriptionset_label".localized
+        descriptionTextField.attributedPlaceholder = NSAttributedString(
+            string: "description_label".localized,
+            attributes: [.foregroundColor: ColorsLayoutConstants.linesColor]
+        )
+        textOfSetLabel.text = "textset_label".localized
     }
     
-    // MARK: - Alert Helper
-    private func showAlert(message: String, title: String = "Error", completion: (() -> Void)? = nil) {
+    // MARK: - Loading View Handling
+    private func showLoading() {
+        let loadingVC = LoadingViewController()
+        loadingVC.modalPresentationStyle = .overFullScreen
+        present(loadingVC, animated: false)
+        self.loadingVC = loadingVC
+    }
+    
+    private func hideLoading(completion: (() -> Void)? = nil) {
+        loadingVC?.dismiss(animated: false, completion: completion)
+        loadingVC = nil
+    }
+    
+    // MARK: - Display Logic
+    func displayCreateSet(viewModel: CreateSet.ViewModel) {
+        let successKey = "set_create_sucess_message"
+        let localizedSuccess = successKey.localized
+        let isSuccess = viewModel.message == localizedSuccess
+        let messageToShow = isSuccess ? localizedSuccess : viewModel.message
+
+        loadingVC?.requestShowResult(
+            message: messageToShow,
+            isSuccess: isSuccess,
+            onOK: { [weak self] in
+                guard let self = self else { return }
+                if isSuccess {
+                    self.router?.routeToProfile(with: self.currentUser)
+                } else {
+                    self.loadingVC = nil
+                }
+            }
+        )
+    }
+    
+    // MARK: - Alert
+    private func showAlert(message: String, title: String = "error_alert_title".localized, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default) { _ in
             completion?()

@@ -2,32 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIUserInterfaceStyle</key>
-	<string>Light</string>
-    
-    <!-- Ключи для доступа к камере и фотогалерее -->
-    <key>NSCameraUsageDescription</key>
-	<string>Мы используем камеру, чтобы вы могли установить аватарку</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Доступ к фотогалерее необходим для выбора аватарки</string>
-    
-    <!-- Ключ для API OpenRouter -->
-    <key>OpenRouterAPIKey</key>
-    <string>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</string>
-    
-    <!-- Регистрация кастомной URL-схемы -->
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleURLName</key>
-            <string>com.yourcompany.myapp</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>myapp</string>
-            </array>
-        </dict>
-    </array>
-    
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.example.myapp</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>myapp</string>
+			</array>
+		</dict>
+	</array>
+	<key>OpenRouterAPIKey</key>
+	<string>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</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

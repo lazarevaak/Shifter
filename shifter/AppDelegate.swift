@@ -1,21 +1,60 @@
 import UIKit
 import CoreData
+import Compression
 
+// MARK: - Data Compression / Decompression Extension
+extension Data {
+    func compressed() -> Data? {
+        let bufferSize = Constants.bufferSize
+        var sourceBuffer = [UInt8](self)
+        let destinationBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
+        defer { destinationBuffer.deallocate() }
+        let compressedSize = compression_encode_buffer(destinationBuffer,
+                                                       bufferSize,
+                                                       &sourceBuffer,
+                                                       self.count,
+                                                       nil,
+                                                       COMPRESSION_ZLIB)
+        guard compressedSize != 0 else { return nil }
+        return Data(bytes: destinationBuffer, count: compressedSize)
+    }
+    
+    func decompressed(using algorithm: compression_algorithm) -> Data? {
+        let bufferSize = Constants.bufferSize
+        let destinationBuffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
+        defer { destinationBuffer.deallocate() }
+        let decompressedSize = self.withUnsafeBytes { (sourceBuffer: UnsafeRawBufferPointer) -> Int in
+            guard let baseAddress = sourceBuffer.baseAddress?.assumingMemoryBound(to: UInt8.self) else { return 0 }
+            return compression_decode_buffer(destinationBuffer,
+                                             bufferSize,
+                                             baseAddress,
+                                             self.count,
+                                             nil,
+                                             algorithm)
+        }
+        guard decompressedSize != 0 else { return nil }
+        return Data(bytes: destinationBuffer, count: decompressedSize)
+    }
+}
+
+// MARK: - AppDelegate
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
+
     var window: UIWindow?
 
+    // MARK: - Core Data Stack
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "UserDataModel")
         container.loadPersistentStores { _, error in
             if let error = error {
-                fatalError("Ошибка загрузки хранилища: \(error)")
+                fatalError("Failed to load persistent store: \(error)")
             }
         }
         return container
     }()
 
+    // MARK: - Core Data Saving Support
     func saveContext() {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -27,29 +66,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    
-    // MARK: - Обработка входящего URL для кастомной схемы
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        // Проверяем, что схема и хост соответствуют нашим
-        if url.scheme == "myapp", url.host == "createSet" {
-            if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-               let queryItems = components.queryItems,
-               let dataItem = queryItems.first(where: { $0.name == "data" })?.value,
-               let decodedData = dataItem.removingPercentEncoding,
-               let jsonData = decodedData.data(using: .utf8) {
-                do {
-                    if let setData = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
-                        // Здесь реализуйте переход на экран создания набора с полученными данными
-                        print("Получены данные набора: \(setData)")
-                        // Например, можно отправить уведомление:
-                        NotificationCenter.default.post(name: Notification.Name("CreateSetWithData"), object: nil, userInfo: setData)
-                    }
-                } catch {
-                    print("Ошибка парсинга JSON: \(error)")
-                }
-            }
-        }
-        return true
-    }
 }
-

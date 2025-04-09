@@ -17,6 +17,7 @@
     </entity>
     <entity name="CardSet" representedClassName="CardSet" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isPublic" optional="YES" attributeType="Boolean" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="learning" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="progressOfSet" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>

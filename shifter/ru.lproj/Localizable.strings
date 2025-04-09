@@ -1,0 +1,158 @@
+/* Заголовок экрана настроек */
+"settings_title" = "Настройки";
+
+/* Placeholder текст */
+"username_placeholder" = "Имя пользователя";
+"email_placeholder" = "Email";
+"password_placeholder" = "Пароль";
+"language_placeholder" = "Язык";
+
+/* Заголовки алертов */
+"error_alert_title" = "Ошибка";
+"success_alert_title" = "Успех";
+"alert_default_title" = "Оповещение";
+
+/* Название кнопки выхода */
+"logout_button_title" = "Выйти";
+
+/* Алерт для выхода */
+"logout_confirm_title" = "Подтверждение";
+"logout_confirm_message" = "Вы действительно хотите выйти из аккаунта?";
+"logout_cancel" = "Отмена";
+"logout_action" = "Выйти";
+
+/* Сообщение об ошибке подтверждения */
+"confirm_password_error" = "Неправильное подтверждение.";
+
+/* Заголовок для настроек пользователя */
+"your_settings_title" = "Ваши Настройки";
+
+/* Локализация языка */
+"language_update_success" = "Язык успешно обновлён.";
+"error_select_language" = "Выберите язык.";
+"save_button_title" = "Сохранить";
+
+/* Экран подтверждения действия */
+"confirm_action_title" = "Подтверждение действия";
+"enter_current_password" = "Введите текущий пароль";
+"confirm_button_title" = "Подтвердить";
+"cancel_button_title" = "Отмена";
+
+/* Экран изменения email */
+"edit_email_title" = "Измените адрес электронной почты";
+"new_email_placeholder" = "Новый адрес электронной почты";
+"please_enter_new_email" = "Пожалуйста, введите новый email.";
+"email_exists_error" = "Пользователь с таким email уже существует. Выберите другой email.";
+"update_email_failed" = "Не удалось обновить email. Попробуйте ещё раз.";
+"email_update_success" = "Email успешно обновлён.";
+
+/* Сообщения об обновлении пароля */
+"password_update_success" = "Пароль успешно обновлён.";
+"password_update_failed" = "Не удалось обновить пароль. Попробуйте ещё раз.";
+"change_password_title" = "Измените свой пароль";
+"new_password_placeholder" = "Новый пароль";
+"confirm_new_password_placeholder" = "Повторите новый пароль";
+"empty_password_error" = "Пожалуйста, введите новый пароль.";
+"passwords_mismatch_error" = "Пароли не совпадают.";
+
+/* Экран изменения имени пользователя */
+"change_username_title" = "Измените имя пользователя";
+"new_username_placeholder" = "Новое имя";
+"empty_username_error" = "Пожалуйста, введите новое имя.";
+"username_update_success" = "Имя пользователя успешно обновлено.";
+"username_update_failed" = "Не удалось обновить имя пользователя. Попробуйте ещё раз.";
+"error_default" = "Ошибка";
+
+/* Значение по умолчанию для имени пользователя */
+"user_default_name" = "Пользователь";
+
+"сreatingset_label" = "Создание набора";
+"nameset_label" = "Имя набора";
+"name_label" = "Имя";
+"descriptionset_label" = "Описание набора";
+"description_label" = "Описание";
+"textset_label" = "Текст набора";
+
+"question_label" = "Вопрос";
+"answer_label" = "Ответ";
+
+"creatingyourset_label" = "Создание Вашего набора...";
+
+"deletecard_label" = "Удалить Карточку";
+"delete_label" = "Удалить";
+"change_label" = "Изменить";
+"study_label" = "Изучить";
+"learned_label" = " Изучена";
+
+"sets_label" = "Наборы";
+"search_label" = "Поиск";
+
+"stillstudying_label" = "Ещё изучаю";
+"studied_label" = "Знаю";
+
+"cards_label" = "Карточки";
+"memorization_label" = "Запоминание";
+"selection_label" = "Выбор";
+"test_label" = "Тест";
+
+"allcardspassed_label" = "Все карточки пройдены";
+"allcardslearned_label" = "Все карточки выучены";
+
+"enteranswer_label" = "Введите Ваш ответ...";
+
+"check_label" = "Проверить";
+
+"error_app" = "Ошибка приложения";
+"error_codeemail" = "Код отправлен на email";
+"incorrect_password" = "Неверный пароль.";
+"usernotfound" = "Пользователь не найден.";
+"error_dataaccess" = "Ошибка доступа к данным.";
+
+"unstudied_label" = "Невыученно:";
+"studied_label" = "Выученно:";
+"progress_label" = "Прогресс:";
+
+"next_button" = "Далее";
+"correct_label" = "Правильных";
+"incorrect_label" = "Неправильных";
+"total_label" = "Всего";
+"test_completed" = "Тест завершён";
+
+"correctanswer_label" = "Корректно!";
+"incorrectanswer_label" = "Некорректно.\nКорректный ответ:\n";
+
+"avatar_save_message" = "Аватар успешно сохранён";
+"choose_avatar_message" = "Выберите аватарку или сделайте фото";
+"avatar_save_error" = "Ошибка сохранения аватара: ";
+"error_save_settings" = "Ошибка при сохранении настроек.";
+"time_limit_error" = "Не удалось создать набор: время ожидания истекло.";
+"generation_error" = "Не удалось сгенерировать сет\nПопробуйте еще раз или позже";
+"save_data_error" = "Ошибка сохранения данных: ";
+
+"set_create_sucess_message" = "Набор успешно создан!";
+
+"password_recovery_label" = "Восстановление пароля";
+"enter_email_label" = "Введите свой адрес электронной почты";
+"youremail_label" = "Ваша почта";
+"send_code_label" = "Отправьте код";
+
+"plsenter_email_label" = "Пожалуйста, введите ваш email.";
+
+"password_reset_label" = "Сброс пароля";
+"enter_code_label" = "Введите код из электронного письма";
+"your_code_label" = "Ваш код";
+"enter_new_password_label" = "Введите новый пароль";
+"new_password_label" = "Новый пароль";
+"reset_password_label" = "Сброс пароля";
+
+"pls_all_message" = "Пожалуйста, заполните все поля.";
+
+"private_set_title" = "Набор приватный";
+"private_set_message" = "Этот набор помечен как закрытый и не может быть расшарен.";
+
+"reg_success_message" = "Регистрация успешна!";
+"reg_fail_message" = "Регистрация провалена.";
+"welcome_message" = "Добро пожаловать!";
+"error_occurred_message" = "Произошла ошибка";
+"password_success_update_message" = "Пароль успешно обновлён!";
+"password_update_error_message" = "Ошибка обновления пароля.";

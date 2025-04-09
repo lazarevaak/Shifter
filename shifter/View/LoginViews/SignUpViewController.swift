@@ -1,8 +1,7 @@
 import UIKit
 import CoreData
 
-// MARK: - Расширение для проверки корректного email
-
+// MARK: - Extension for checking the correct email
 extension String {
     var isValidEmail: Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
@@ -52,7 +51,7 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestur
     
     private let emailUnderline: UIView = {
         let view = UIView()
-        view.backgroundColor = ColorsLayoutConstants.additionalColor
+        view.backgroundColor = ColorsLayoutConstants.linesColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -79,7 +78,7 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestur
     
     private let passwordUnderline: UIView = {
         let view = UIView()
-        view.backgroundColor = ColorsLayoutConstants.additionalColor
+        view.backgroundColor = ColorsLayoutConstants.linesColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -96,7 +95,7 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestur
         let label = UILabel()
         label.text = "I agree to the Terms of Services and Privacy Policy."
         label.font = UIFont.systemFont(ofSize: SizeLayoutConstants.instructionFontSize)
-        label.textColor = ColorsLayoutConstants.additionalColor
+        label.textColor = ColorsLayoutConstants.linesColor
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -105,7 +104,7 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestur
     private let continueButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Continue", for: .normal)
-        btn.setTitleColor(ColorsLayoutConstants.buttonTextbackgroundColor, for: .normal)
+        btn.setTitleColor(ColorsLayoutConstants.buttonTextColor, for: .normal)
         btn.backgroundColor = ColorsLayoutConstants.buttonColor
         btn.titleLabel?.font = UIFont.systemFont(ofSize: SizeLayoutConstants.buttonFontSize, weight: .bold)
         btn.layer.cornerRadius = 8
@@ -163,7 +162,7 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestur
         swipeUpGesture.delegate = self
         view.addGestureRecognizer(swipeUpGesture)
         
-        view.backgroundColor = ColorsLayoutConstants.buttonTextbackgroundColor
+        view.backgroundColor = ColorsLayoutConstants.buttonTextColor
        
         view.addSubview(titleLabel)
         view.addSubview(emailLabel)
@@ -177,7 +176,6 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestur
         view.addSubview(continueButton)
         view.addSubview(bottomStack)
         
-        // Назначаем делегаты для UITextField
         emailTextField.delegate = self
         passwordTextField.delegate = self
         
@@ -190,7 +188,6 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestur
     }
     
     private func setupModule() {
-        // Clean Swift: связываем VIP-слои
         let interactor = SignUpInteractor()
         let presenter = SignUpPresenter()
         let router = SignUpRouter()
@@ -205,15 +202,18 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestur
     
     // MARK: - Constraints
     private func setupConstraints() {
+        let horizontalPadding: CGFloat = 32
+
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 160),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
-   
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 144),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: horizontalPadding),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -horizontalPadding),
+            
             emailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 32),
             emailLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            emailLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
-            emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 4),
+            emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 12),
             emailTextField.leadingAnchor.constraint(equalTo: emailLabel.leadingAnchor),
             emailTextField.trailingAnchor.constraint(equalTo: emailLabel.trailingAnchor),
             
@@ -226,7 +226,7 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestur
             passwordLabel.leadingAnchor.constraint(equalTo: emailLabel.leadingAnchor),
             passwordLabel.trailingAnchor.constraint(equalTo: emailLabel.trailingAnchor),
             
-            passwordTextField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 4),
+            passwordTextField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 12),
             passwordTextField.leadingAnchor.constraint(equalTo: passwordLabel.leadingAnchor),
             passwordTextField.trailingAnchor.constraint(equalTo: passwordLabel.trailingAnchor),
             
@@ -243,7 +243,7 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestur
             termsLabel.centerYAnchor.constraint(equalTo: termsCheckBoxButton.centerYAnchor),
             termsLabel.leadingAnchor.constraint(equalTo: termsCheckBoxButton.trailingAnchor, constant: 8),
             termsLabel.trailingAnchor.constraint(equalTo: passwordUnderline.trailingAnchor),
-   
+       
             continueButton.topAnchor.constraint(equalTo: termsCheckBoxButton.bottomAnchor, constant: 32),
             continueButton.leadingAnchor.constraint(equalTo: passwordLabel.leadingAnchor),
             continueButton.trailingAnchor.constraint(equalTo: passwordLabel.trailingAnchor),
@@ -253,6 +253,7 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestur
             bottomStack.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
+
     
     // MARK: - Actions
     private func setupActions() {
@@ -281,31 +282,26 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestur
     
     // MARK: - Button Actions
     @objc private func signInTapped() {
-        // Если у пользователя уже есть аккаунт, переходим к экрану входа
         navigationController?.popViewController(animated: true)
     }
     
     @objc private func continueButtonTapped() {
-        // Проверяем, что поля не пусты
         guard let email = emailTextField.text, !email.isEmpty,
               let password = passwordTextField.text, !password.isEmpty else {
             showAlert(message: "Please fill in all fields.")
             return
         }
         
-        // Проверяем, что введённый email корректен
         guard email.isValidEmail else {
             showAlert(message: "Please enter a valid email address.")
             return
         }
         
-        // Проверяем, что пользователь согласился с условиями
         guard isTermsChecked else {
             showAlert(message: "Please accept the terms.")
             return
         }
         
-        // Извлекаем имя из email (всё, что до символа '@')
         let name = email.components(separatedBy: "@").first ?? ""
         
         let request = SignUp.Request(name: name, email: email, password: password)
@@ -316,16 +312,16 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestur
     func displaySignUp(viewModel: SignUp.ViewModel) {
         showAlert(
             message: viewModel.message,
-            title: viewModel.message == "Registration successful!" ? "Success" : "Error"
+            title: viewModel.message == "reg_success_message".localized ? "success_alert_title".localized : "Error"
         ) {
-            if viewModel.message == "Registration successful!" {
+            if viewModel.message == "reg_success_message".localized {
                 self.router?.routeToSignIn()
             }
         }
     }
     
     // MARK: - Alert Helper
-    private func showAlert(message: String, title: String = "Error", completion: (() -> Void)? = nil) {
+    private func showAlert(message: String, title: String = "error_alert_title".localized, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default) { _ in
             completion?()

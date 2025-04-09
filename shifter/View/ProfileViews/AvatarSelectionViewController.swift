@@ -1,43 +1,20 @@
 import UIKit
 import CoreData
 
-
-// MARK: - AvatarSelectionViewController
+// MARK: - ViewController
 final class AvatarSelectionViewController: UIViewController {
-    
-    // MARK: - Свойство Core Data
 
-    private let user: User
-    
-    /// Контекст Core Data
-    private let context = (UIApplication.shared.delegate as! AppDelegate)
-        .persistentContainer.viewContext
-    
-    // MARK: - Публичное свойство для обратного вызова
-    /// Передаёт выбранное изображение обратно (для обновления UI в вызывающем контроллере)
-    var onAvatarSelected: ((UIImage) -> Void)?
-    
-    /// Храним выбранное изображение (из камеры, галереи или выбранной иконки)
-    private var selectedImage: UIImage?
-    
-    // Массив имён иконок. Добавлены записи "redAvatar" и "grayAvatar" для специальных вариантов.
-    private let avatarIcons: [String] = [
-        "person.circle",
-        "person.circle.fill",
-        "redAvatar",
-        "grayAvatar"
-    ]
-    
-    private var selectedIndexPath: IndexPath?
-    
-    // MARK: - UI
+    // MARK: - VIP Components
+    var interactor: AvatarSelectionBusinessLogic?
+    var router: AvatarSelectionRoutingLogic?
+
+    // MARK: - UI Elements
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        
-        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        layout.minimumInteritemSpacing = 8
-        layout.minimumLineSpacing = 8
-        
+        layout.sectionInset = AvatarSelectionLayout.sectionInset
+        layout.minimumInteritemSpacing = AvatarSelectionLayout.minimumSpacing
+        layout.minimumLineSpacing = AvatarSelectionLayout.minimumSpacing
+
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.register(AvatarCell.self, forCellWithReuseIdentifier: "AvatarCell")
         cv.dataSource = self
@@ -46,61 +23,80 @@ final class AvatarSelectionViewController: UIViewController {
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()
-    
-    // MARK: - Инициализатор
-    init(user: User) {
-        self.user = user
+
+    private var selectedIndexPath: IndexPath?
+    private var selectedImage: UIImage?
+    private var icons: [String] = []
+
+    var onAvatarSelected: ((UIImage) -> Void)?
+
+    // MARK: - Initialization
+    init(user: User, context: NSManagedObjectContext) {
         super.init(nibName: nil, bundle: nil)
+        setup(user: user, context: context)
     }
+
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) не используется")
+        fatalError("init(coder:) has not been implemented")
     }
-    
-    // MARK: - Жизненный цикл
+
+    private func setup(user: User, context: NSManagedObjectContext) {
+        let interactor = AvatarSelectionInteractor(user: user, context: context)
+        let presenter = AvatarSelectionPresenter()
+        let router = AvatarSelectionRouter()
+
+        self.interactor = interactor
+        self.router = router
+        interactor.presenter = presenter
+        presenter.viewController = self
+        router.viewController = self
+    }
+
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        
         setupNavigationBar()
         setupCollectionView()
+        interactor?.fetchAvatarIcons(request: AvatarSelection.FetchAvatarIcons.Request())
+
+        NotificationCenter.default.addObserver(self, selector: #selector(updateLocalizedTexts), name: Notification.Name("LanguageDidChange"), object: nil)
     }
-    
+
+    // MARK: - Setup
     private func setupNavigationBar() {
-        let cancelItem = UIBarButtonItem(
-            title: "Отменить",
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: "cancel_button_title".localized,
             style: .plain,
             target: self,
             action: #selector(cancelButtonTapped)
         )
-        cancelItem.tintColor = .gray
-        navigationItem.leftBarButtonItem = cancelItem
-        
-        let saveItem = UIBarButtonItem(
-            title: "Сохранить",
+        navigationItem.leftBarButtonItem?.tintColor = ColorsLayoutConstants.specialTextColor
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "save_button_title".localized,
             style: .done,
             target: self,
             action: #selector(saveButtonTapped)
         )
-        saveItem.tintColor = ColorsLayoutConstants.basicColor
-        navigationItem.rightBarButtonItem = saveItem
-        
+        navigationItem.rightBarButtonItem?.tintColor = ColorsLayoutConstants.basicColor
+
         let cameraButton = UIButton(type: .system)
         cameraButton.setImage(UIImage(systemName: "camera"), for: .normal)
         cameraButton.addTarget(self, action: #selector(cameraButtonTapped), for: .touchUpInside)
-        cameraButton.tintColor = .gray  
-        
+        cameraButton.tintColor = ColorsLayoutConstants.specialTextColor
+
         let galleryButton = UIButton(type: .system)
         galleryButton.setImage(UIImage(systemName: "photo"), for: .normal)
         galleryButton.addTarget(self, action: #selector(galleryButtonTapped), for: .touchUpInside)
-        galleryButton.tintColor = .gray
-        
+        galleryButton.tintColor = ColorsLayoutConstants.specialTextColor
+
         let stackView = UIStackView(arrangedSubviews: [cameraButton, galleryButton])
         stackView.axis = .horizontal
-        stackView.spacing = 24
-        
+        stackView.spacing = AvatarSelectionLayout.cameraGallerySpacing
         navigationItem.titleView = stackView
     }
-    
+
     private func setupCollectionView() {
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
@@ -110,102 +106,92 @@ final class AvatarSelectionViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
-    
-    // MARK: - Действия
+
+    // MARK: - Actions
     @objc private func cancelButtonTapped() {
-        dismiss(animated: true, completion: nil)
+        router?.dismiss()
     }
-    
+
     @objc private func saveButtonTapped() {
-        if let indexPath = selectedIndexPath {
-            let iconName = avatarIcons[indexPath.row]
-            selectedImage = imageForIcon(named: iconName)
-        }
-        
-        guard let finalImage = selectedImage else {
-            print("Выберите аватарку или сделайте фото")
-            return
-        }
-        
-        if let data = finalImage.jpegData(compressionQuality: 0.8) {
-            user.avatarData = data
-            do {
-                try context.save()
-                print("Аватар успешно сохранён для пользователя с email: \(user.email ?? "nil")")
-            } catch {
-                print("Ошибка сохранения аватара: \(error)")
-            }
-        }
-        
-        onAvatarSelected?(finalImage)
-        dismiss(animated: true, completion: nil)
+        let request = AvatarSelection.SaveAvatar.Request(
+            selectedImage: selectedImage,
+            selectedIconIndex: selectedIndexPath?.row
+        )
+        interactor?.saveAvatar(request: request)
     }
-    
+
     @objc private func cameraButtonTapped() {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            print("Камера недоступна на этом устройстве/эмуляторе")
+            print("Camera is not available on this device")
             return
         }
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .camera
-        present(picker, animated: true, completion: nil)
+        present(picker, animated: true)
     }
-    
+
     @objc private func galleryButtonTapped() {
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .photoLibrary
-        present(picker, animated: true, completion: nil)
+        present(picker, animated: true)
     }
 
-    private func imageForIcon(named iconName: String) -> UIImage? {
-        if iconName == "redAvatar" {
-            let image = UIImage(systemName: "person.circle.fill")
-            return image?.withTintColor(ColorsLayoutConstants.basicColor, renderingMode: .alwaysOriginal)
-        } else if iconName == "grayAvatar" {
-            let image = UIImage(systemName: "person.circle.fill")
-            return image?.withTintColor(ColorsLayoutConstants.additionalColor, renderingMode: .alwaysOriginal)
-        } else {
-            return UIImage(systemName: iconName)
+    @objc private func updateLocalizedTexts() {
+        navigationItem.leftBarButtonItem?.title = "cancel_button_title".localized
+        navigationItem.rightBarButtonItem?.title = "save_button_title".localized
+    }
+}
+
+// MARK: - Display Logic
+extension AvatarSelectionViewController: AvatarSelectionDisplayLogic {
+    func displaySaveAvatar(viewModel: AvatarSelection.SaveAvatar.ViewModel) {
+        print(viewModel.displayMessage)
+        if viewModel.displayMessage == "avatar_save_message".localized {
+            if let image = selectedImage {
+                onAvatarSelected?(image)
+            } else if let indexPath = selectedIndexPath,
+                      let iconName = icons[safe: indexPath.row],
+                      let image = UIImage(named: iconName) {
+                onAvatarSelected?(image)
+            }
+            router?.dismiss()
         }
+    }
+
+    func displayAvatarIcons(viewModel: AvatarSelection.FetchAvatarIcons.ViewModel) {
+        self.icons = viewModel.icons
+        collectionView.reloadData()
     }
 }
 
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 extension AvatarSelectionViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return avatarIcons.count
+        return icons.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "AvatarCell",
-                for: indexPath
-        ) as? AvatarCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AvatarCell", for: indexPath) as? AvatarCell else {
             return UICollectionViewCell()
         }
-        let iconName = avatarIcons[indexPath.row]
+        let iconName = icons[indexPath.row]
         cell.configure(with: iconName)
-        
         let isSelected = (indexPath == selectedIndexPath)
         cell.contentView.layer.borderColor = isSelected ? UIColor.systemBlue.cgColor : UIColor.clear.cgColor
-        cell.contentView.layer.borderWidth = isSelected ? 2 : 0
-        
+        cell.contentView.layer.borderWidth = isSelected ? AvatarSelectionLayout.selectedBorderWidth : 0
         return cell
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedImage = nil
         selectedIndexPath = indexPath
         collectionView.reloadData()
     }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let totalSpacing: CGFloat = 16 * 2 + 8 * 2
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let totalSpacing = AvatarSelectionLayout.sectionInset.left + AvatarSelectionLayout.sectionInset.right + AvatarSelectionLayout.minimumSpacing * 2
         let width = (collectionView.frame.width - totalSpacing) / 3
         return CGSize(width: width, height: width)
     }
@@ -213,20 +199,16 @@ extension AvatarSelectionViewController: UICollectionViewDataSource, UICollectio
 
 // MARK: - UIImagePickerControllerDelegate, UINavigationControllerDelegate
 extension AvatarSelectionViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-    func imagePickerController(_ picker: UIImagePickerController,
-                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        picker.dismiss(animated: true, completion: nil)
-        
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
         guard let pickedImage = info[.originalImage] as? UIImage else { return }
-        
         selectedImage = pickedImage
         selectedIndexPath = nil
         collectionView.reloadData()
     }
-    
+
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
+        picker.dismiss(animated: true)
     }
 }
 
@@ -235,39 +217,40 @@ final class AvatarCell: UICollectionViewCell {
     private let imageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
-        iv.tintColor = .label
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(imageView)
-        contentView.layer.cornerRadius = 8
+        contentView.layer.cornerRadius = AvatarSelectionLayout.cellCornerRadius
         contentView.clipsToBounds = true
-        
+
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            imageView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8),
-            imageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.8)
+            imageView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: Layout.imageMultiplier),
+            imageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: Layout.imageMultiplier)
         ])
     }
-    
+
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) не используется")
+        fatalError("init(coder:) has not been implemented")
     }
-    
+
     func configure(with iconName: String) {
-        if iconName == "redAvatar" {
-            let image = UIImage(systemName: "person.circle.fill")
-            imageView.image = image?.withTintColor(ColorsLayoutConstants.basicColor, renderingMode: .alwaysOriginal)
-        } else if iconName == "grayAvatar" {
-            let image = UIImage(systemName: "person.circle.fill")
-            imageView.image = image?.withTintColor(ColorsLayoutConstants.additionalColor, renderingMode: .alwaysOriginal)
-        } else {
-            imageView.image = UIImage(systemName: iconName)
-            imageView.tintColor = .label
-        }
+        imageView.image = UIImage(named: iconName)
+    }
+
+    private enum Layout {
+        static let imageMultiplier: CGFloat = 0.8
+    }
+}
+
+// MARK: - Array Safe Access Extension
+extension Array {
+    subscript(safe index: Int) -> Element? {
+        return indices.contains(index) ? self[index] : nil
     }
 }

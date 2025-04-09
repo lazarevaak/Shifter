@@ -1,36 +1,21 @@
 import UIKit
 import CoreData
 
-// MARK: - Константы для ResetPasswordViewController
-enum ResetPasswordConstants {
-    static let titleTopPadding: CGFloat = 40
-    static let codeInstructionTopPadding: CGFloat = 35
-    static let codeTextFieldTopPadding: CGFloat = 8
-    static let codeTextFieldHeight: CGFloat = 44
-    static let passwordInstructionTopPadding: CGFloat = 20
-    static let passwordTextFieldTopPadding: CGFloat = 8
-    static let passwordTextFieldHeight: CGFloat = 44
-    static let resetButtonTopPadding: CGFloat = 35
-    static let resetButtonHeight: CGFloat = 44
-    static let leadingTrailingInset: CGFloat = 32
-    static let cornerRadius: CGFloat = 8
-    
-    static let titleFontSize: CGFloat = 28
-    static let instructionFontSize: CGFloat = 16
-    static let textFieldFontSize: CGFloat = 16
-    static let buttonFontSize: CGFloat = 16
-}
+// MARK: - ViewController
 
 final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayLogic {
-    
-    // MARK: - Clean Swift Components
+
+    // MARK: - Properties
+
     var interactor: ResetPasswordBusinessLogic?
     var router: ResetPasswordRoutingLogic?
-    
-    // MARK: - Свойства
+
+    // MARK: - Feature Data
+
     private let email: String
-    
-    // MARK: - UI Элементы
+
+    // MARK: - UI Elements
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Password Reset"
@@ -39,7 +24,7 @@ final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayL
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     private let codeInstructionLabel: UILabel = {
         let label = UILabel()
         label.text = "Enter the code from the email"
@@ -48,7 +33,7 @@ final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayL
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     private let codeTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Your code"
@@ -58,14 +43,14 @@ final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayL
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
-    
+
     private let codeUnderline: UIView = {
         let view = UIView()
-        view.backgroundColor = ColorsLayoutConstants.additionalColor
+        view.backgroundColor = ColorsLayoutConstants.specialTextColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+
     private let passwordInstructionLabel: UILabel = {
         let label = UILabel()
         label.text = "Enter a new password"
@@ -74,7 +59,7 @@ final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayL
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     private let newPasswordTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "New password"
@@ -84,42 +69,45 @@ final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayL
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
-    
+
     private let passwordUnderline: UIView = {
         let view = UIView()
-        view.backgroundColor = ColorsLayoutConstants.additionalColor
+        view.backgroundColor = ColorsLayoutConstants.specialTextColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
+
     private let resetButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Reset password", for: .normal)
-        btn.backgroundColor = .systemGray4
-        btn.setTitleColor(ColorsLayoutConstants.buttonTextbackgroundColor, for: .normal)
+        btn.backgroundColor = ColorsLayoutConstants.buttonColor
+        btn.setTitleColor(ColorsLayoutConstants.buttonTextColor, for: .normal)
         btn.titleLabel?.font = UIFont.systemFont(ofSize: ResetPasswordConstants.buttonFontSize, weight: .semibold)
         btn.layer.cornerRadius = ResetPasswordConstants.cornerRadius
         btn.translatesAutoresizingMaskIntoConstraints = false
         return btn
     }()
-    
-    // MARK: - Инициализация
+
+    // MARK: - Initialization
+
     init(email: String) {
         self.email = email
         super.init(nibName: nil, bundle: nil)
     }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    // MARK: - Жизненный цикл
+
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = ColorsLayoutConstants.buttonTextbackgroundColor
-        
+        view.backgroundColor = ColorsLayoutConstants.backgroundColor
+
         navigationItem.title = ""
         navigationItem.hidesBackButton = true
-        
+
         let backArrowButton = UIButton(type: .system)
         backArrowButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
         backArrowButton.tintColor = ColorsLayoutConstants.basicColor
@@ -138,28 +126,29 @@ final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayL
         view.addSubview(newPasswordTextField)
         view.addSubview(passwordUnderline)
         view.addSubview(resetButton)
-        
+
         setupConstraints()
         setupActions()
-        
         setupModule()
     }
-    
-    // MARK: - Module Configuration
+
+    // MARK: - Module Setup
+
     private func setupModule() {
         let interactor = ResetPasswordInteractor()
         let presenter = ResetPasswordPresenter()
         let router = ResetPasswordRouter()
-        
+
         self.interactor = interactor
         self.router = router
-        
+
         interactor.presenter = presenter
         presenter.viewController = self
         router.viewController = self
     }
-    
+
     // MARK: - Layout
+
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -168,41 +157,41 @@ final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayL
                                                 constant: ResetPasswordConstants.leadingTrailingInset),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
                                                  constant: -ResetPasswordConstants.leadingTrailingInset),
-            
+
             codeInstructionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
                                                       constant: ResetPasswordConstants.codeInstructionTopPadding),
             codeInstructionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
                                                           constant: ResetPasswordConstants.leadingTrailingInset),
             codeInstructionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
                                                            constant: -ResetPasswordConstants.leadingTrailingInset),
-            
+
             codeTextField.topAnchor.constraint(equalTo: codeInstructionLabel.bottomAnchor,
                                                constant: ResetPasswordConstants.codeTextFieldTopPadding),
             codeTextField.leadingAnchor.constraint(equalTo: codeInstructionLabel.leadingAnchor),
             codeTextField.trailingAnchor.constraint(equalTo: codeInstructionLabel.trailingAnchor),
             codeTextField.heightAnchor.constraint(equalToConstant: ResetPasswordConstants.codeTextFieldHeight),
-            
+
             codeUnderline.topAnchor.constraint(equalTo: codeTextField.bottomAnchor),
             codeUnderline.leadingAnchor.constraint(equalTo: codeTextField.leadingAnchor),
             codeUnderline.trailingAnchor.constraint(equalTo: codeTextField.trailingAnchor),
             codeUnderline.heightAnchor.constraint(equalToConstant: 1),
-            
+
             passwordInstructionLabel.topAnchor.constraint(equalTo: codeUnderline.bottomAnchor,
                                                           constant: ResetPasswordConstants.passwordInstructionTopPadding),
             passwordInstructionLabel.leadingAnchor.constraint(equalTo: codeTextField.leadingAnchor),
             passwordInstructionLabel.trailingAnchor.constraint(equalTo: codeTextField.trailingAnchor),
-            
+
             newPasswordTextField.topAnchor.constraint(equalTo: passwordInstructionLabel.bottomAnchor,
                                                       constant: ResetPasswordConstants.passwordTextFieldTopPadding),
             newPasswordTextField.leadingAnchor.constraint(equalTo: passwordInstructionLabel.leadingAnchor),
             newPasswordTextField.trailingAnchor.constraint(equalTo: passwordInstructionLabel.trailingAnchor),
             newPasswordTextField.heightAnchor.constraint(equalToConstant: ResetPasswordConstants.passwordTextFieldHeight),
-            
+
             passwordUnderline.topAnchor.constraint(equalTo: newPasswordTextField.bottomAnchor),
             passwordUnderline.leadingAnchor.constraint(equalTo: newPasswordTextField.leadingAnchor),
             passwordUnderline.trailingAnchor.constraint(equalTo: newPasswordTextField.trailingAnchor),
             passwordUnderline.heightAnchor.constraint(equalToConstant: 1),
-            
+
             resetButton.topAnchor.constraint(equalTo: passwordUnderline.bottomAnchor,
                                              constant: ResetPasswordConstants.resetButtonTopPadding),
             resetButton.leadingAnchor.constraint(equalTo: newPasswordTextField.leadingAnchor),
@@ -210,39 +199,43 @@ final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayL
             resetButton.heightAnchor.constraint(equalToConstant: ResetPasswordConstants.resetButtonHeight)
         ])
     }
-    
+
     // MARK: - Actions Setup
+
     private func setupActions() {
         resetButton.addTarget(self, action: #selector(resetPasswordButtonTapped), for: .touchUpInside)
     }
-    
+
     // MARK: - Button Actions
+
     @objc private func backButtonPressed() {
         navigationController?.popViewController(animated: true)
     }
-    
+
     @objc private func resetPasswordButtonTapped() {
         guard let code = codeTextField.text, !code.isEmpty,
               let newPassword = newPasswordTextField.text, !newPassword.isEmpty else {
-            showAlert(message: "Пожалуйста, заполните все поля.")
+            showAlert(message: "pls_all_message".localized)
             return
         }
-        
+
         let request = ResetPassword.Request(code: code, newPassword: newPassword, email: email)
         interactor?.resetPassword(request: request)
     }
-    
-    // MARK: - ResetPasswordDisplayLogic
+
+    // MARK: - Display Logic
+
     func displayResetPassword(viewModel: ResetPassword.ViewModel) {
-        showAlert(message: viewModel.message, title: viewModel.success ? "Успех" : "Ошибка") {
+        showAlert(message: viewModel.message, title: viewModel.success ? "success_alert_title".localized : "error_alert_title".localized) {
             if viewModel.success {
                 self.navigationController?.popToRootViewController(animated: true)
             }
         }
     }
-    
+
     // MARK: - Alert Helper
-    private func showAlert(message: String, title: String = "Внимание", completion: (() -> Void)? = nil) {
+
+    private func showAlert(message: String, title: String = "Attention", completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default) { _ in completion?() }
         alert.addAction(ok)

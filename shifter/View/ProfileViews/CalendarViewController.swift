@@ -8,7 +8,7 @@ final class CalendarDayCell: UICollectionViewCell {
     private let dayLabel: UILabel = {
        let label = UILabel()
        label.textAlignment = .center
-       label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+       label.font = UIFont.systemFont(ofSize: SizeLayoutConstants.instructionFontSize, weight: .medium)
        label.translatesAutoresizingMaskIntoConstraints = false
        return label
     }()
@@ -35,11 +35,11 @@ final class CalendarDayCell: UICollectionViewCell {
         } else {
             dayLabel.text = "\(day.dayNumber)"
             if day.isToday {
-                dayLabel.textColor = .white
+                dayLabel.textColor = ColorsLayoutConstants.buttonTextColor
                 contentView.backgroundColor = ColorsLayoutConstants.basicColor
             } else {
                 dayLabel.textColor = day.isCurrentMonth ? .label : .secondaryLabel
-                contentView.backgroundColor = day.isWeekend ? UIColor.systemRed.withAlphaComponent(0.2) : .clear
+                contentView.backgroundColor = day.isWeekend ? ColorsLayoutConstants.basicColor.withAlphaComponent(0.2) : .clear
             }
         }
     }
@@ -54,7 +54,7 @@ final class CalendarViewController: UIView, UICollectionViewDataSource, UICollec
     private let monthLabel: UILabel = {
        let label = UILabel()
        label.textAlignment = .center
-       label.font = UIFont.boldSystemFont(ofSize: 18)
+       label.font = UIFont.boldSystemFont(ofSize: SizeLayoutConstants.textTitleSize)
        label.translatesAutoresizingMaskIntoConstraints = false
        return label
     }()
@@ -95,7 +95,6 @@ final class CalendarViewController: UIView, UICollectionViewDataSource, UICollec
         setupWeekdayStack()
         setupConstraints()
         
-        // Генерируем календарь для текущей даты
         generateDays(for: Date())
     }
     
@@ -218,7 +217,7 @@ final class CalendarViewController: UIView, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let totalSpacing: CGFloat = 2 * 6 // 6 промежутков по 2
+        let totalSpacing: CGFloat = 2 * 6 
         let width = (collectionView.frame.width - totalSpacing) / 7
         return CGSize(width: width, height: 32)
     }

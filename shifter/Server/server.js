@@ -57,8 +57,6 @@ app.post('/api/send_reset_code', async (req, res) => {
         }
     });
 
-
-// Запуск сервера
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://192.168.1.11:${PORT}`);

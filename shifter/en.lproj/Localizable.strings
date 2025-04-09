@@ -1,0 +1,158 @@
+/* Settings screen title */
+"settings_title" = "Settings";
+
+/* Placeholder texts */
+"username_placeholder" = "Username";
+"email_placeholder" = "Email";
+"password_placeholder" = "Password";
+"language_placeholder" = "Language";
+
+/* Alert titles */
+"error_alert_title" = "Error";
+"success_alert_title" = "Success";
+"alert_default_title" = "Alert";
+
+/* Button titles */
+"logout_button_title" = "Logout";
+
+/* Logout alert */
+"logout_confirm_title" = "Confirmation";
+"logout_confirm_message" = "Are you sure you want to log out?";
+"logout_cancel" = "Cancel";
+"logout_action" = "Log out";
+
+/* Confirmation error */
+"confirm_password_error" = "Incorrect confirmation.";
+
+/* Your settings title */
+"your_settings_title" = "Your Settings";
+
+/* Localization messages */
+"language_update_success" = "Language updated successfully.";
+"error_select_language" = "Please select a language.";
+"save_button_title" = "Save";
+
+/* Confirm action screen */
+"confirm_action_title" = "Confirm Action";
+"enter_current_password" = "Enter current password";
+"confirm_button_title" = "Confirm";
+"cancel_button_title" = "Cancel";
+
+/* Edit email screen */
+"edit_email_title" = "Change your email address";
+"new_email_placeholder" = "New email address";
+"please_enter_new_email" = "Please enter a new email address.";
+"email_exists_error" = "A user with that email already exists. Please choose another email.";
+"update_email_failed" = "Failed to update email. Please try again.";
+"email_update_success" = "Email updated successfully.";
+
+/* Password update messages */
+"password_update_success" = "Password successfully updated.";
+"password_update_failed" = "Failed to update password. Please try again.";
+"change_password_title" = "Change your password";
+"new_password_placeholder" = "New password";
+"confirm_new_password_placeholder" = "Repeat the new password";
+"empty_password_error" = "Please enter a new password.";
+"passwords_mismatch_error" = "Passwords do not match.";
+
+/* Edit username messages */
+"change_username_title" = "Change your user's name";
+"new_username_placeholder" = "New name";
+"empty_username_error" = "Please enter a new name.";
+"username_update_success" = "Username successfully updated.";
+"username_update_failed" = "Failed to update username. Please try again.";
+"error_default" = "Error";
+
+/* User default name (if not set) */
+"user_default_name" = "User";
+
+"сreatingset_label" = "Creating a set";
+"nameset_label" = "Name of set";
+"name_label" = "Name";
+"descriptionset_label" = "Description of set";
+"description_label" = "Description";
+"textset_label" = "Text of set";
+
+"question_label" = "Question";
+"answer_label" = "Answer";
+
+"creatingyourset_label" = "Creating your set...";
+
+"deletecard_label" = "Delete Card";
+"delete_label" = "Delete";
+"change_label" = "Change";
+"study_label" = "Study";
+"learned_label" = " Learned";
+
+"sets_label" = "Sets";
+"search_label" = "Search";
+
+"stillstudying_label" = "I'm still studying";
+"studied_label" = "Studied";
+
+"cards_label" = "Cards";
+"memorization_label" = "Memorization";
+"selection_label" = "Selection";
+"test_label" = "Test";
+
+"allcardspassed_label" = "All cards are passed";
+"allcardslearned_label" = "All cards are learned";
+
+"enteranswer_label" = "Enter your answer...";
+
+"check_label" = "Check";
+
+"error_app" = "Application error";
+"error_codeemail" = "The code has been sent by email";
+"incorrect_password" = "Invalid password.";
+"usernotfound" = "The user was not found.";
+"error_dataaccess" = "Data access error.";
+
+"unstudied_label" = "Unstudied:";
+"studied_label" = "Studied:";
+"progress_label" = "Progress:";
+
+"next_button" = "Next";
+"correct_label" = "Correct";
+"incorrect_label" = "Incorrect";
+"total_label" = "Total";
+"test_completed" = "Test Completed";
+
+"correctanswer_label" = "Correct!";
+"incorrectanswer_label" = "Incorrect.\nThe correct answer is:\n";
+
+"avatar_save_message" = "Avatar saved successfully";
+"choose_avatar_message" = "Choose an avatar or take a photo";
+"avatar_save_error" = "Avatar saving error: ";
+"error_save_settings" = "Error saving the settings.";
+"time_limit_error" = "Failed to create a set: the waiting time has expired.";
+"generation_error" = "Couldn't generate a set\nTry again or later";
+"save_data_error" = "Data saving error: ";
+
+"set_create_sucess_message" = "Set created successfully!";
+
+"password_recovery_label" = "Password Recovery";
+"enter_email_label" = "Enter your email address";
+"youremail_label" = "Your email";
+"send_code_label" = "Send the code";
+
+"plsenter_email_label" = "Please enter your email address.";
+
+"password_reset_label" = "Password Reset";
+"enter_code_label" = "Enter the code from the email";
+"your_code_label" = "Your code";
+"enter_new_password_label" = "Enter a new password";
+"new_password_label" = "New password";
+"reset_password_label" = "Reset password";
+
+"pls_all_message" = "Please fill in all fields.";
+
+"private_set_title" = "Set is Private";
+"private_set_message" = "This set is marked as closed and cannot be expanded.";
+
+"reg_success_message" = "Registration successful!";
+"reg_fail_message" = "Registration failed.";
+"welcome_message" = "Welcome!";
+"error_occurred_message" = "An error has occurred";
+"password_success_update_message" = "Password has been successfully updated!";
+"password_update_error_message" = "Password update error.";

@@ -1,7 +1,9 @@
 import UIKit
+
 // MARK: - Models
 
 enum Loading {
+    // MARK: ShowResult Models
     enum ShowResult {
         struct Request {
             let message: String
@@ -20,27 +22,30 @@ enum Loading {
 
 // MARK: - Protocols
 
-// Business Logic
+// MARK: Business Logic
 protocol LoadingBusinessLogic {
     func showResult(request: Loading.ShowResult.Request)
 }
+
+// MARK: Data Store
 protocol LoadingDataStore {
     var resultMessage: String? { get set }
 }
 
-// Display Logic
+// MARK: Display Logic
 protocol LoadingDisplayLogic: AnyObject {
     func displayShowResult(viewModel: Loading.ShowResult.ViewModel)
 }
 
-// Presentation Logic
+// MARK: Presentation Logic
 protocol LoadingPresentationLogic {
     func presentShowResult(response: Loading.ShowResult.Response)
 }
 
-// Routing
+// MARK: Routing Logic
 protocol LoadingRoutingLogic {}
 
+// MARK: Data Passing 
 protocol LoadingDataPassing {
     var dataStore: LoadingDataStore? { get }
 }

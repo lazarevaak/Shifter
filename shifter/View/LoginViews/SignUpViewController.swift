@@ -11,7 +11,6 @@ extension String {
 }
 
 // MARK: - SignUpViewController
-
 final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestureRecognizerDelegate, UITextFieldDelegate {
     
     // MARK: - Clean Swift Components
@@ -200,56 +199,53 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestur
         router.viewController = self
     }
     
-    // MARK: - Constraints
     private func setupConstraints() {
-        let horizontalPadding: CGFloat = 32
-
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 144),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: horizontalPadding),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -horizontalPadding),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: SignUpLayoutConstants.upperSize),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: SignUpLayoutConstants.horizontalPadding),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -SignUpLayoutConstants.horizontalPadding),
             
-            emailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 32),
+            emailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: SignUpLayoutConstants.horizontalPadding),
             emailLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             emailLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             
-            emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 12),
+            emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: SignUpLayoutConstants.topAnchorSize),
             emailTextField.leadingAnchor.constraint(equalTo: emailLabel.leadingAnchor),
             emailTextField.trailingAnchor.constraint(equalTo: emailLabel.trailingAnchor),
             
-            emailUnderline.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 8),
+            emailUnderline.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: SignUpLayoutConstants.topMiniSize),
             emailUnderline.leadingAnchor.constraint(equalTo: emailTextField.leadingAnchor),
             emailUnderline.trailingAnchor.constraint(equalTo: emailTextField.trailingAnchor),
             emailUnderline.heightAnchor.constraint(equalToConstant: 1),
             
-            passwordLabel.topAnchor.constraint(equalTo: emailUnderline.bottomAnchor, constant: 24),
+            passwordLabel.topAnchor.constraint(equalTo: emailUnderline.bottomAnchor, constant: SignUpLayoutConstants.topAnchor2Size),
             passwordLabel.leadingAnchor.constraint(equalTo: emailLabel.leadingAnchor),
             passwordLabel.trailingAnchor.constraint(equalTo: emailLabel.trailingAnchor),
             
-            passwordTextField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 12),
+            passwordTextField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: SignUpLayoutConstants.topAnchorSize),
             passwordTextField.leadingAnchor.constraint(equalTo: passwordLabel.leadingAnchor),
             passwordTextField.trailingAnchor.constraint(equalTo: passwordLabel.trailingAnchor),
             
-            passwordUnderline.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 8),
+            passwordUnderline.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: SignUpLayoutConstants.topMiniSize),
             passwordUnderline.leadingAnchor.constraint(equalTo: passwordTextField.leadingAnchor),
             passwordUnderline.trailingAnchor.constraint(equalTo: passwordTextField.trailingAnchor),
             passwordUnderline.heightAnchor.constraint(equalToConstant: 1),
         
-            termsCheckBoxButton.topAnchor.constraint(equalTo: passwordUnderline.bottomAnchor, constant: 24),
+            termsCheckBoxButton.topAnchor.constraint(equalTo: passwordUnderline.bottomAnchor, constant: SignUpLayoutConstants.topAnchor2Size),
             termsCheckBoxButton.leadingAnchor.constraint(equalTo: passwordLabel.leadingAnchor),
-            termsCheckBoxButton.widthAnchor.constraint(equalToConstant: 24),
-            termsCheckBoxButton.heightAnchor.constraint(equalToConstant: 24),
+            termsCheckBoxButton.widthAnchor.constraint(equalToConstant: SignUpLayoutConstants.topAnchor2Size),
+            termsCheckBoxButton.heightAnchor.constraint(equalToConstant: SignUpLayoutConstants.topAnchor2Size),
             
             termsLabel.centerYAnchor.constraint(equalTo: termsCheckBoxButton.centerYAnchor),
-            termsLabel.leadingAnchor.constraint(equalTo: termsCheckBoxButton.trailingAnchor, constant: 8),
+            termsLabel.leadingAnchor.constraint(equalTo: termsCheckBoxButton.trailingAnchor, constant: SignUpLayoutConstants.topMiniSize),
             termsLabel.trailingAnchor.constraint(equalTo: passwordUnderline.trailingAnchor),
        
-            continueButton.topAnchor.constraint(equalTo: termsCheckBoxButton.bottomAnchor, constant: 32),
+            continueButton.topAnchor.constraint(equalTo: termsCheckBoxButton.bottomAnchor, constant: SignUpLayoutConstants.horizontalPadding),
             continueButton.leadingAnchor.constraint(equalTo: passwordLabel.leadingAnchor),
             continueButton.trailingAnchor.constraint(equalTo: passwordLabel.trailingAnchor),
-            continueButton.heightAnchor.constraint(equalToConstant: 48),
+            continueButton.heightAnchor.constraint(equalToConstant: SignUpLayoutConstants.topAnchor4Size),
             
-            bottomStack.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: 32),
+            bottomStack.topAnchor.constraint(equalTo: continueButton.bottomAnchor, constant: SignUpLayoutConstants.horizontalPadding),
             bottomStack.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
@@ -288,17 +284,17 @@ final class SignUpViewController: UIViewController, SignUpDisplayLogic, UIGestur
     @objc private func continueButtonTapped() {
         guard let email = emailTextField.text, !email.isEmpty,
               let password = passwordTextField.text, !password.isEmpty else {
-            showAlert(message: "Please fill in all fields.")
+            showAlert(message: "pls_all_message".localized)
             return
         }
         
         guard email.isValidEmail else {
-            showAlert(message: "Please enter a valid email address.")
+            showAlert(message: "pls_enter_valid_email".localized)
             return
         }
         
         guard isTermsChecked else {
-            showAlert(message: "Please accept the terms.")
+            showAlert(message: "pls_accept_term".localized)
             return
         }
         

@@ -337,7 +337,7 @@ final class SignInViewController: UIViewController,
     }
     
     // MARK: - Alert
-    private func showAlert(message: String, title: String = "Ошибка") {
+    private func showAlert(message: String, title: String = "Error") {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default)
         alert.addAction(ok)

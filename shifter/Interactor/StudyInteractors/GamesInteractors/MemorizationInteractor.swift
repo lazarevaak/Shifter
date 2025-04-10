@@ -1,6 +1,8 @@
 import Foundation
 import CoreData
 
+// MARK: - Models
+
 struct MultipleChoiceCard {
     let question: String
     let correctAnswer: String
@@ -32,6 +34,9 @@ enum Memorization {
     }
 }
 
+// MARK: - Protocols
+
+// MARK: - Business Logic Protocol
 protocol MemorizationBusinessLogic {
     func loadCards(request: Memorization.LoadCards.Request)
     func selectOption(request: Memorization.OptionSelected.Request)
@@ -42,7 +47,7 @@ protocol MemorizationRoutingLogic {
     func routeToResults(correctAnswers: Int, total: Int)
 }
 
-// MARK: - Presentation Logic
+// MARK: - Presentation Logic Protocol
 protocol MemorizationPresentationLogic {
     func presentCards(response: Memorization.LoadCards.ViewModel)
     func presentOptionResult(isCorrect: Bool, viewModel: Memorization.LoadCards.ViewModel)
@@ -50,20 +55,30 @@ protocol MemorizationPresentationLogic {
     func presentFinish(correctAnswers: Int, total: Int)
 }
 
+// MARK: - Display Logic Protocol
+protocol MemorizationDisplayLogic: AnyObject {
+    func displayCards(viewModel: Memorization.LoadCards.ViewModel)
+    func displayOptionResult(viewModel: Memorization.LoadCards.ViewModel, isCorrect: Bool)
+    func displayError(message: String)
+    func displayFinishAlert(message: String)
+}
+
+// MARK: - Interactor
 final class MemorizationInteractor: MemorizationBusinessLogic {
     
+    // MARK: Properties
     var presenter: MemorizationPresentationLogic?
     var cardSet: CardSet?
-    
     private var cards: [MultipleChoiceCard] = []
     private var correctAnswersCount: Int = 0
     private var originalCardsCount: Int = 0
     
+    // MARK: - Load Cards
     func loadCards(request: Memorization.LoadCards.Request) {
         guard let cardSet = cardSet,
               let cardObjects = cardSet.cards?.allObjects as? [Card],
               !cardObjects.isEmpty else {
-            presenter?.presentError(message: "Набор карточек не найден.")
+            presenter?.presentError(message: "Card set not found.")
             return
         }
         
@@ -80,6 +95,7 @@ final class MemorizationInteractor: MemorizationBusinessLogic {
         sendCurrentCardToPresenter()
     }
     
+    // MARK: - Option Selection
     func selectOption(request: Memorization.OptionSelected.Request) {
         guard !cards.isEmpty else { return }
         let currentCard = cards[0]
@@ -105,17 +121,23 @@ final class MemorizationInteractor: MemorizationBusinessLogic {
         sendCurrentCardToPresenter(withAnswerCorrectness: isCorrect)
     }
     
+    // MARK: - Helper Methods
     private func sendCurrentCardToPresenter(withAnswerCorrectness isCorrect: Bool? = nil) {
         let currentCard = cards[0]
         let options = optionsForCard(currentCard)
-        let cardVM = MemorizationCardViewModel(question: currentCard.question,
-                                               options: options,
-                                               correctAnswer: currentCard.correctAnswer)
+        let cardVM = MemorizationCardViewModel(
+            question: currentCard.question,
+            options: options,
+            correctAnswer: currentCard.correctAnswer
+        )
         let progress = Float(correctAnswersCount + 1) / Float(originalCardsCount)
-        let viewModel = Memorization.LoadCards.ViewModel(displayCards: [cardVM],
-                                                         currentIndex: correctAnswersCount + 1,
-                                                         totalCount: originalCardsCount,
-                                                         progress: progress)
+        let viewModel = Memorization.LoadCards.ViewModel(
+            displayCards: [cardVM],
+            currentIndex: correctAnswersCount + 1,
+            totalCount: originalCardsCount,
+            progress: progress
+        )
+        
         if let isCorrect = isCorrect {
             presenter?.presentOptionResult(isCorrect: isCorrect, viewModel: viewModel)
         } else {
@@ -124,6 +146,7 @@ final class MemorizationInteractor: MemorizationBusinessLogic {
     }
     
     private func optionsForCard(_ card: MultipleChoiceCard) -> [String] {
+        // Generate multiple-choice options
         let totalOptionsCount = 4
         var distractors = cards.filter { $0.correctAnswer != card.correctAnswer }
                                .map { $0.correctAnswer }
@@ -136,6 +159,7 @@ final class MemorizationInteractor: MemorizationBusinessLogic {
         return options
     }
     
+    // MARK: - Core Data Updates
     private func updateCardLearningStatus(for card: MultipleChoiceCard, learned: Bool) {
         guard let cardSet = cardSet,
               let cardObjects = cardSet.cards?.allObjects as? [Card] else { return }
@@ -149,7 +173,7 @@ final class MemorizationInteractor: MemorizationBusinessLogic {
         do {
             try context.save()
         } catch {
-            print("Ошибка сохранения контекста: \(error)")
+            print("Error saving context: \(error)")
         }
     }
 }

@@ -668,17 +668,48 @@ class SetDetailsViewController: UIViewController {
     }
     
     @objc private func deleteTapped() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let ctx = appDelegate.persistentContainer.viewContext
-        ctx.delete(cardSet)
-        do {
-            try ctx.save()
-            NotificationCenter.default.post(name: NSNotification.Name("SetDeletedNotification"), object: nil)
-            dismiss(animated: true, completion: nil)
-        } catch {
-            os_log("Error deleting set: %{public}@", log: logger, type: .error, error.localizedDescription)
-        }
+        let alert = UIAlertController(
+            title: "del_set_message".localized,
+            message: "sure_del_set_message".localized,
+            preferredStyle: .alert
+        )
+        
+        let cancelAction = UIAlertAction(
+            title: "cancel_button_title".localized,
+            style: .cancel,
+            handler: nil
+        )
+        cancelAction.setValue(ColorsLayoutConstants.specialTextColor, forKey: "titleTextColor")
+        alert.addAction(cancelAction)
+        
+        alert.addAction(UIAlertAction(
+            title: "delete_label".localized,
+            style: .destructive
+        ) { [weak self] _ in
+            guard let self = self,
+                  let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+            let ctx = appDelegate.persistentContainer.viewContext
+            ctx.delete(self.cardSet)
+            do {
+                try ctx.save()
+                NotificationCenter.default.post(
+                    name: NSNotification.Name("SetDeletedNotification"),
+                    object: nil
+                )
+                self.dismiss(animated: true)
+            } catch {
+                os_log(
+                    "Error deleting set: %{public}@",
+                    log: self.logger,
+                    type: .error,
+                    error.localizedDescription
+                )
+            }
+        })
+        
+        present(alert, animated: true)
     }
+
     
     @objc private func changeCardTapped() {
             guard !cards.isEmpty else { return }
@@ -700,7 +731,6 @@ class SetDetailsViewController: UIViewController {
             present(editVC, animated: true, completion: nil)
         }
     
-    // Новый обработчик нажатия кнопки редактирования набора
     @objc private func editCardSetTapped() {
         let editVC = EditCardSetViewController(cardSet: cardSet)
         editVC.delegate = self
@@ -755,15 +785,25 @@ class SetDetailsViewController: UIViewController {
         guard !cards.isEmpty else { return }
 
         let alert = UIAlertController(
-            title: "Delete Card",
-            message: "Are you sure you want to delete this card?",
+            title: "del_card_message".localized,
+            message: "sure_del_card_message".localized,
             preferredStyle: .alert
         )
 
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        let cancelAction = UIAlertAction(
+            title: "cancel_button_title".localized,
+            style: .cancel,
+            handler: nil
+        )
+        cancelAction.setValue(ColorsLayoutConstants.specialTextColor, forKey: "titleTextColor")
+        alert.addAction(cancelAction)
 
-        alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
-            guard let self = self, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        alert.addAction(UIAlertAction(
+            title: "delete_label".localized,
+            style: .destructive
+        ) { [weak self] _ in
+            guard let self = self,
+                  let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
             let ctx = appDelegate.persistentContainer.viewContext
 
             let cardToDelete = self.cards[self.currentCardIndex]
@@ -776,7 +816,10 @@ class SetDetailsViewController: UIViewController {
                 if self.cards.isEmpty {
                     ctx.delete(self.cardSet)
                     try ctx.save()
-                    NotificationCenter.default.post(name: NSNotification.Name("SetDeletedNotification"), object: nil)
+                    NotificationCenter.default.post(
+                        name: NSNotification.Name("SetDeletedNotification"),
+                        object: nil
+                    )
                     self.dismiss(animated: true)
                 } else {
                     self.currentCardIndex = min(self.currentCardIndex, self.cards.count - 1)
@@ -785,12 +828,18 @@ class SetDetailsViewController: UIViewController {
                     self.updateProgressUI()
                 }
             } catch {
-                os_log("Error deleting card or set: %{public}@", log: self.logger, type: .error, error.localizedDescription)
+                os_log(
+                    "Error deleting card or set: %{public}@",
+                    log: self.logger,
+                    type: .error,
+                    error.localizedDescription
+                )
             }
-        }))
+        })
 
         present(alert, animated: true)
     }
+
     
     @objc private func updateLocalizedTexts() {
         learnedButton.setTitle("learned_label".localized, for: .normal)

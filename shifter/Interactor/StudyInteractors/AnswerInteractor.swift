@@ -1,7 +1,6 @@
 import UIKit
 
 // MARK: - Models
-
 enum AnswerReview {
     enum FetchResults {
         struct Request { }
@@ -18,18 +17,29 @@ enum AnswerReview {
     }
 }
 
-// MARK: - Display Logic
+// MARK: - Protocols
 
+// MARK: - Display Logic
 protocol AnswerReviewDisplayLogic: AnyObject {
     func displayResults(viewModel: AnswerReview.FetchResults.ViewModel)
 }
 
 // MARK: - Business Logic
-
 protocol AnswerReviewBusinessLogic {
     func fetchResults(request: AnswerReview.FetchResults.Request)
 }
 
+// MARK: - Presentation Logic
+protocol AnswerReviewPresentationLogic {
+    func presentResults(response: AnswerReview.FetchResults.Response)
+}
+
+// MARK: - Routing Logic
+protocol AnswerReviewRoutingLogic {
+    func routeToNext()
+}
+
+// MARK: - Data Store
 protocol AnswerReviewDataStore {
     var title: String { get set }
     var correctAnswers: Int { get set }
@@ -37,28 +47,15 @@ protocol AnswerReviewDataStore {
     var totalCards: Int { get set }
 }
 
-// MARK: - Presentation Logic
-
-protocol AnswerReviewPresentationLogic {
-    func presentResults(response: AnswerReview.FetchResults.Response)
-}
-
-// MARK: - Routing Logic
-
-protocol AnswerReviewRoutingLogic {
-    func routeToNext()
-}
-
+// MARK: - Data Passing
 protocol AnswerReviewDataPassing {
     var dataStore: AnswerReviewDataStore? { get }
 }
 
 // MARK: - Interactor
-
 final class AnswerReviewInteractor: AnswerReviewBusinessLogic, AnswerReviewDataStore {
 
     // MARK: - Properties
-
     var presenter: AnswerReviewPresentationLogic?
     var title: String = ""
     var correctAnswers: Int = 0
@@ -66,7 +63,6 @@ final class AnswerReviewInteractor: AnswerReviewBusinessLogic, AnswerReviewDataS
     var totalCards: Int = 0
 
     // MARK: - Business Logic
-
     func fetchResults(request: AnswerReview.FetchResults.Request) {
         let response = AnswerReview.FetchResults.Response(
             title: title,

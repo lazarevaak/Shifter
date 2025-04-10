@@ -1,8 +1,7 @@
 import UIKit
 import CoreData
 
-// MARK: - Модели для передачи данных
-
+// MARK: - Models 
 enum SetsModels {
     struct FetchSetsRequest { }
     
@@ -31,6 +30,7 @@ enum SetsModels {
     enum SortOrder {
         case ascending, descending
     }
+    
     struct SortRequest {
         let order: SortOrder
     }
@@ -40,8 +40,9 @@ enum SetsModels {
     }
 }
 
-// MARK: - Протоколы для VIP
+// MARK: - Protocols
 
+// MARK: - Business Logic
 protocol SetsBusinessLogic {
     func fetchSets(request: SetsModels.FetchSetsRequest)
     func searchSets(request: SetsModels.SearchRequest)
@@ -49,6 +50,7 @@ protocol SetsBusinessLogic {
     func deleteSet(request: SetsModels.DeleteRequest)
 }
 
+// MARK: - Presentation Logic
 protocol SetsPresentationLogic: AnyObject {
     func presentFetchedSets(response: SetsModels.FetchSetsResponse)
     func presentSearchedSets(response: SetsModels.SearchResponse)
@@ -56,25 +58,30 @@ protocol SetsPresentationLogic: AnyObject {
     func presentDeletedSet()
 }
 
+// MARK: - Display Logic
 protocol SetsDisplayLogic: AnyObject {
     func displayFetchedSets(viewModel: SetsModels.FetchSetsViewModel)
     func displayError(message: String)
 }
 
-// MARK: - Интерактор
+// MARK: - Interactor
 
 final class SetsInteractor: SetsBusinessLogic {
+    // MARK: Properties
     var presenter: SetsPresentationLogic?
     var currentUser: User
     private var allSets: [CardSet] = []
     
     var availableSets: [CardSet] {
-            return allSets
-        }
+        return allSets
+    }
+    
+    // MARK: Initializer
     init(currentUser: User) {
         self.currentUser = currentUser
     }
     
+    // MARK: Fetch Sets
     func fetchSets(request: SetsModels.FetchSetsRequest) {
         if let userSets = currentUser.sets as? Set<CardSet> {
             allSets = Array(userSets)
@@ -85,8 +92,11 @@ final class SetsInteractor: SetsBusinessLogic {
         presenter?.presentFetchedSets(response: response)
     }
     
+    // MARK: Search Sets
     func searchSets(request: SetsModels.SearchRequest) {
-        let query = request.query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let query = request.query
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
         let filtered: [CardSet]
         if query.isEmpty {
             filtered = allSets
@@ -97,6 +107,7 @@ final class SetsInteractor: SetsBusinessLogic {
         presenter?.presentSearchedSets(response: response)
     }
     
+    // MARK: Sort Sets
     func sortSets(request: SetsModels.SortRequest) {
         let sorted: [CardSet]
         switch request.order {
@@ -108,6 +119,7 @@ final class SetsInteractor: SetsBusinessLogic {
         presenter?.presentSortedSets(sets: sorted)
     }
     
+    // MARK: Delete Set
     func deleteSet(request: SetsModels.DeleteRequest) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             presenter?.presentDeletedSet()

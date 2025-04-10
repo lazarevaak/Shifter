@@ -18,6 +18,8 @@ enum EditEmailModels {
     }
 }
 
+// MARK: - Protocols
+
 // MARK: - Business Logic
 
 protocol EditEmailBusinessLogic {

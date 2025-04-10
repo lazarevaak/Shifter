@@ -18,6 +18,8 @@ enum EditLanguageModels {
     }
 }
 
+// MARK: - Protocols
+
 // MARK: - Business Logic
 
 protocol EditLanguageBusinessLogic {

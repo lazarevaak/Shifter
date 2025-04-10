@@ -50,7 +50,7 @@ final class ForgotPasswordInteractor: ForgotPasswordBusinessLogic {
     // MARK: - Business Logic
     func sendResetCode(request: ForgotPassword.Request) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            let response = ForgotPassword.Response(success: false, message: "Ошибка приложения")
+            let response = ForgotPassword.Response(success: false, message: "error_app".localized)
             presenter?.presentForgotPassword(response: response)
             return
         }
@@ -62,12 +62,12 @@ final class ForgotPasswordInteractor: ForgotPasswordBusinessLogic {
         do {
             let users = try context.fetch(fetchRequest)
             if users.isEmpty {
-                let response = ForgotPassword.Response(success: false, message: "Пользователь с таким email не найден.")
+                let response = ForgotPassword.Response(success: false, message: "user_email_notfound_message".localized)
                 presenter?.presentForgotPassword(response: response)
                 return
             }
         } catch {
-            let response = ForgotPassword.Response(success: false, message: "Ошибка доступа к данным.")
+            let response = ForgotPassword.Response(success: false, message: "error_dataaccess".localized)
             presenter?.presentForgotPassword(response: response)
             return
         }
@@ -76,7 +76,7 @@ final class ForgotPasswordInteractor: ForgotPasswordBusinessLogic {
         UserDefaults.standard.set(resetCode, forKey: "ResetCode_\(request.email)")
         
         guard let url = URL(string: serverURL) else {
-            let response = ForgotPassword.Response(success: false, message: "Неверный URL для отправки email.")
+            let response = ForgotPassword.Response(success: false, message: "invalid_URL_error".localized)
             presenter?.presentForgotPassword(response: response)
             return
         }
@@ -90,18 +90,18 @@ final class ForgotPasswordInteractor: ForgotPasswordBusinessLogic {
         URLSession.shared.dataTask(with: urlRequest) { data, response, error in
             DispatchQueue.main.async {
                 if let error = error {
-                    let resp = ForgotPassword.Response(success: false, message: "Ошибка при отправке email: \(error.localizedDescription)")
+                    let resp = ForgotPassword.Response(success: false, message: "sending_email_error".localized + ": \(error.localizedDescription)")
                     self.presenter?.presentForgotPassword(response: resp)
                     return
                 }
                 
                 guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                    let resp = ForgotPassword.Response(success: false, message: "Ошибка при отправке email.")
+                    let resp = ForgotPassword.Response(success: false, message: "sending_email_error".localized)
                     self.presenter?.presentForgotPassword(response: resp)
                     return
                 }
                 
-                let resp = ForgotPassword.Response(success: true, message: "Код отправлен на email.")
+                let resp = ForgotPassword.Response(success: true, message: "code_sent_email_message".localized)
                 self.presenter?.presentForgotPassword(response: resp)
             }
         }.resume()

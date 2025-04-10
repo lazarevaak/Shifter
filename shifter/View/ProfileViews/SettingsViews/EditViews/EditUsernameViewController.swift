@@ -13,7 +13,7 @@ final class EditUsernameViewController: UIViewController, EditUsernameDisplayLog
     // MARK: - UI Elements
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "change_username_title".localized  // Ключ для локализации заголовка экрана
+        label.text = "change_username_title".localized
         label.font = UIFont.boldSystemFont(ofSize: SizeLayoutConstants.textTitleSize)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -22,7 +22,7 @@ final class EditUsernameViewController: UIViewController, EditUsernameDisplayLog
     
     private lazy var usernameTextField: UITextField = {
         let tf = UITextField()
-        tf.placeholder = "new_username_placeholder".localized  // Ключ для placeholder нового имени
+        tf.placeholder = "new_username_placeholder".localized
         tf.borderStyle = .roundedRect
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
@@ -30,7 +30,7 @@ final class EditUsernameViewController: UIViewController, EditUsernameDisplayLog
     
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("save_button_title".localized, for: .normal)  // Ключ для названия кнопки
+        button.setTitle("save_button_title".localized, for: .normal)
         button.setTitleColor(ColorsLayoutConstants.buttonTextColor, for: .normal)
         button.backgroundColor = ColorsLayoutConstants.basicColor
         button.layer.cornerRadius = 8
@@ -76,18 +76,18 @@ final class EditUsernameViewController: UIViewController, EditUsernameDisplayLog
         view.addSubview(saveButton)
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -SizeLayoutConstants.editConstaintSize),
             
-            usernameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            usernameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            usernameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            usernameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            usernameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            usernameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -SizeLayoutConstants.editConstaintSize),
             
-            saveButton.topAnchor.constraint(equalTo: usernameTextField.bottomAnchor, constant: 20),
-            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            saveButton.heightAnchor.constraint(equalToConstant: 44)
+            saveButton.topAnchor.constraint(equalTo: usernameTextField.bottomAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -SizeLayoutConstants.editConstaintSize),
+            saveButton.heightAnchor.constraint(equalToConstant: SizeLayoutConstants.editHeightAnchorSize)
         ])
     }
     
@@ -104,7 +104,7 @@ final class EditUsernameViewController: UIViewController, EditUsernameDisplayLog
         let alert = UIAlertController(title: "error_alert_title".localized,
                                       message: message,
                                       preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "ok_button_title".localized, style: .default))
+        alert.addAction(UIAlertAction(title: "ОК", style: .default))
         present(alert, animated: true)
     }
     

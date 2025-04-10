@@ -2,20 +2,16 @@ import UIKit
 import CoreData
 
 // MARK: - ViewController
-
 final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayLogic {
 
     // MARK: - Properties
-
     var interactor: ResetPasswordBusinessLogic?
     var router: ResetPasswordRoutingLogic?
 
     // MARK: - Feature Data
-
     private let email: String
 
     // MARK: - UI Elements
-
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Password Reset"
@@ -89,7 +85,6 @@ final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayL
     }()
 
     // MARK: - Initialization
-
     init(email: String) {
         self.email = email
         super.init(nibName: nil, bundle: nil)
@@ -100,7 +95,6 @@ final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayL
     }
 
     // MARK: - Lifecycle
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = ColorsLayoutConstants.backgroundColor
@@ -133,7 +127,6 @@ final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayL
     }
 
     // MARK: - Module Setup
-
     private func setupModule() {
         let interactor = ResetPasswordInteractor()
         let presenter = ResetPasswordPresenter()
@@ -148,7 +141,6 @@ final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayL
     }
 
     // MARK: - Layout
-
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,
@@ -201,13 +193,11 @@ final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayL
     }
 
     // MARK: - Actions Setup
-
     private func setupActions() {
         resetButton.addTarget(self, action: #selector(resetPasswordButtonTapped), for: .touchUpInside)
     }
 
     // MARK: - Button Actions
-
     @objc private func backButtonPressed() {
         navigationController?.popViewController(animated: true)
     }
@@ -224,7 +214,6 @@ final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayL
     }
 
     // MARK: - Display Logic
-
     func displayResetPassword(viewModel: ResetPassword.ViewModel) {
         showAlert(message: viewModel.message, title: viewModel.success ? "success_alert_title".localized : "error_alert_title".localized) {
             if viewModel.success {
@@ -234,7 +223,6 @@ final class ResetPasswordViewController: UIViewController, ResetPasswordDisplayL
     }
 
     // MARK: - Alert Helper
-
     private func showAlert(message: String, title: String = "Attention", completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default) { _ in completion?() }

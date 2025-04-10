@@ -42,24 +42,24 @@ enum CardsModels {
 
 // MARK: - Protocols
 
+// MARK: - Business Logic
 protocol CardsBusinessLogic {
     func fetchCards(request: CardsModels.FetchCardsRequest)
     func updateLearnedStatus(request: CardsModels.UpdateLearnedStatusRequest)
     func moveToNextCard(request: CardsModels.NextCardRequest)
 }
 
+// MARK: - Display Logic
 protocol CardsDisplayLogic: AnyObject {
     func displayFetchedCards(viewModel: CardsModels.FetchCardsViewModel)
     func displayNextCard(viewModel: CardsModels.FetchCardsViewModel)
 }
-
 
 // MARK: - Presentation Logic
 protocol CardsPresentationLogic: AnyObject {
     func presentFetchedCards(response: CardsModels.FetchCardsResponse)
     func presentNextCard(response: CardsModels.NextCardResponse)
 }
-
 
 // MARK: - Interactor
 final class CardsInteractor: CardsBusinessLogic {

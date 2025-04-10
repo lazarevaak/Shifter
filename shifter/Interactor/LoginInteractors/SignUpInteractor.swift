@@ -62,7 +62,7 @@ final class SignUpInteractor: SignUpBusinessLogic {
         do {
             let existingUsers = try context.fetch(fetchRequest)
             if !existingUsers.isEmpty {
-                let response = SignUp.Response(success: false, errorMessage: "Пользователь с таким email уже существует.")
+                let response = SignUp.Response(success: false, errorMessage: "user_already_exists_message".localized)
                 presenter?.presentSignUp(response: response)
                 return
             }
@@ -77,7 +77,7 @@ final class SignUpInteractor: SignUpBusinessLogic {
             presenter?.presentSignUp(response: response)
             
         } catch {
-            let response = SignUp.Response(success: false, errorMessage: "Ошибка доступа к базе. Попробуйте позже.")
+            let response = SignUp.Response(success: false, errorMessage: "database_later_message".localized)
             presenter?.presentSignUp(response: response)
         }
     }

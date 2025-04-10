@@ -1,14 +1,12 @@
 import UIKit
 
 // MARK: - Router
-
 final class ProfileRouter: ProfileRoutingLogic {
     
     // MARK: - Properties
     weak var viewController: UIViewController?
     
     // MARK: - Routing Logic
-    
     func routeToSettings(with user: User) {
         let settingsVC = SettingsViewController(user: user)
         settingsVC.modalPresentationStyle = .fullScreen

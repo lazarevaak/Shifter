@@ -31,13 +31,14 @@ final class ProfileViewController: UIViewController, ProfileDisplayLogic {
     private let textFieldUnderline: UIView = {
         let view = UIView()
         view.backgroundColor = ColorsLayoutConstants.linesColor
+        view.layer.borderWidth = 0.5
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
     private let userNameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.font = UIFont.boldSystemFont(ofSize: SizeLayoutConstants.overlayLabelSize)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -92,7 +93,8 @@ final class ProfileViewController: UIViewController, ProfileDisplayLogic {
         return button
     }()
 
-    private let calendarView: CalendarViewController = {
+    // MARK: - Calendar Child Controller
+    private let calendarVC: CalendarViewController = {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         return CalendarViewController(context: context)
     }()
@@ -117,10 +119,14 @@ final class ProfileViewController: UIViewController, ProfileDisplayLogic {
         navigationItem.hidesBackButton = true
 
         setupUI()
+        addCalendarChild()
         setupModule()
         interactor?.fetchProfile(request: Profile.Request())
 
-        NotificationCenter.default.addObserver(self, selector: #selector(updateLocalizedTexts), name: Notification.Name("LanguageDidChange"), object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(updateLocalizedTexts),
+                                               name: Notification.Name("LanguageDidChange"),
+                                               object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -132,7 +138,7 @@ final class ProfileViewController: UIViewController, ProfileDisplayLogic {
         NotificationCenter.default.removeObserver(self)
     }
 
-    // MARK: - Setup
+    // MARK: - Setup UI
     private func setupUI() {
         view.addSubview(topDividerView)
         view.addSubview(profileImageView)
@@ -140,7 +146,6 @@ final class ProfileViewController: UIViewController, ProfileDisplayLogic {
         view.addSubview(textFieldUnderline)
         view.addSubview(settingsButton)
         view.addSubview(dividerSettingsCalendar)
-        view.addSubview(calendarView)
         view.addSubview(tabBarView)
 
         let stackView = UIStackView(arrangedSubviews: [documentButton, addButton, profileButton])
@@ -190,11 +195,6 @@ final class ProfileViewController: UIViewController, ProfileDisplayLogic {
             dividerSettingsCalendar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -ProfileLayout.horizontalPadding),
             dividerSettingsCalendar.heightAnchor.constraint(equalToConstant: ProfileLayout.dividerHeight),
 
-            calendarView.topAnchor.constraint(equalTo: dividerSettingsCalendar.bottomAnchor, constant: ProfileLayout.labelTopSpacing),
-            calendarView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ProfileLayout.horizontalPadding),
-            calendarView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -ProfileLayout.horizontalPadding),
-            calendarView.heightAnchor.constraint(equalToConstant: ProfileLayout.calendarHeight),
-
             tabBarView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tabBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tabBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -206,6 +206,22 @@ final class ProfileViewController: UIViewController, ProfileDisplayLogic {
         ])
     }
 
+    private func addCalendarChild() {
+        addChild(calendarVC)
+        view.addSubview(calendarVC.view)
+        calendarVC.view.translatesAutoresizingMaskIntoConstraints = false
+   
+        NSLayoutConstraint.activate([
+            calendarVC.view.topAnchor.constraint(equalTo: dividerSettingsCalendar.bottomAnchor, constant: ProfileLayout.labelTopSpacing),
+            calendarVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ProfileLayout.horizontalPadding),
+            calendarVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -ProfileLayout.horizontalPadding),
+            calendarVC.view.heightAnchor.constraint(equalToConstant: ProfileLayout.calendarHeight)
+        ])
+        
+        calendarVC.didMove(toParent: self)
+    }
+
+    // MARK: - Module Setup
     private func setupModule() {
         let interactor = ProfileInteractor(user: user)
         let presenter = ProfilePresenter()

@@ -1,10 +1,5 @@
 import UIKit
 
-protocol TestDisplayLogic: AnyObject {
-    func displayTest(viewModel: TestModels.TestViewModel)
-    func displayAnswer(viewModel: TestModels.CheckAnswerViewModel)
-}
-
 final class TestViewController: UIViewController, TestDisplayLogic {
 
     // MARK: - VIP компоненты
@@ -63,7 +58,7 @@ final class TestViewController: UIViewController, TestDisplayLogic {
     private let testTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "test_label".localized
-        label.font = UIFont.boldSystemFont(ofSize: 22)
+        label.font = UIFont.boldSystemFont(ofSize: SizeLayoutConstants.testTextSize)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -71,7 +66,7 @@ final class TestViewController: UIViewController, TestDisplayLogic {
 
     private let questionLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 22, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: SizeLayoutConstants.testTextSize, weight: .medium)
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -176,8 +171,8 @@ final class TestViewController: UIViewController, TestDisplayLogic {
 
             closeButton.centerYAnchor.constraint(equalTo: topBarView.centerYAnchor),
             closeButton.leadingAnchor.constraint(equalTo: topBarView.leadingAnchor, constant: 16),
-            closeButton.widthAnchor.constraint(equalToConstant: 30),
-            closeButton.heightAnchor.constraint(equalToConstant: 30),
+            closeButton.widthAnchor.constraint(equalToConstant: GamesConstants.buttonSize),
+            closeButton.heightAnchor.constraint(equalToConstant: GamesConstants.buttonSize),
 
             testTitleLabel.centerYAnchor.constraint(equalTo: topBarView.centerYAnchor),
             testTitleLabel.centerXAnchor.constraint(equalTo: topBarView.centerXAnchor),
@@ -202,7 +197,7 @@ final class TestViewController: UIViewController, TestDisplayLogic {
             contentStackView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 40),
             contentStackView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -40),
 
-            checkButton.heightAnchor.constraint(equalToConstant: 44)
+            checkButton.heightAnchor.constraint(equalToConstant: SizeLayoutConstants.editHeightAnchorSize)
         ])
     }
 

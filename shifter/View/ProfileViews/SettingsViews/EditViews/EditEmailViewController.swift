@@ -12,7 +12,6 @@ final class EditEmailViewController: UIViewController, EditEmailDisplayLogic {
     // MARK: - UI Elements
     private let titleLabel: UILabel = {
         let label = UILabel()
-        // Используем локализованную строку для заголовка экрана редактирования email
         label.text = "edit_email_title".localized
         label.font = UIFont.boldSystemFont(ofSize: SizeLayoutConstants.textTitleSize)
         label.textAlignment = .center
@@ -22,7 +21,6 @@ final class EditEmailViewController: UIViewController, EditEmailDisplayLogic {
     
     private lazy var emailTextField: UITextField = {
         let tf = UITextField()
-        // Локализованный placeholder для поля ввода нового email
         tf.placeholder = "new_email_placeholder".localized
         tf.borderStyle = .roundedRect
         tf.translatesAutoresizingMaskIntoConstraints = false
@@ -79,18 +77,18 @@ final class EditEmailViewController: UIViewController, EditEmailDisplayLogic {
         view.addSubview(saveButton)
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -SizeLayoutConstants.editConstaintSize),
             
-            emailTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            emailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            emailTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            emailTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            emailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            emailTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -SizeLayoutConstants.editConstaintSize),
             
-            saveButton.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 20),
-            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            saveButton.heightAnchor.constraint(equalToConstant: 44)
+            saveButton.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -SizeLayoutConstants.editConstaintSize),
+            saveButton.heightAnchor.constraint(equalToConstant: SizeLayoutConstants.editHeightAnchorSize)
         ])
     }
     
@@ -112,7 +110,7 @@ final class EditEmailViewController: UIViewController, EditEmailDisplayLogic {
                 message: viewModel.message,
                 preferredStyle: .alert
             )
-            alert.addAction(UIAlertAction(title: "ok_button_title".localized, style: .default))
+            alert.addAction(UIAlertAction(title: "ОК", style: .default))
             present(alert, animated: true)
         }
     }

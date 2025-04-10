@@ -84,11 +84,17 @@
 "study_label" = "Study";
 "learned_label" = " Learned";
 
+"del_set_message" = "Delete Set";
+"sure_del_set_message" = "Are you sure you want to delete this set?";
+
+"del_card_message" = "Delete Card";
+"sure_del_card_message" = "Are you sure you want to delete this card?";
+
 "sets_label" = "Sets";
 "search_label" = "Search";
 
 "stillstudying_label" = "I'm still studying";
-"studied_label" = "Studied";
+"studing_label" = "Studied";
 
 "cards_label" = "Cards";
 "memorization_label" = "Memorization";
@@ -156,3 +162,16 @@
 "error_occurred_message" = "An error has occurred";
 "password_success_update_message" = "Password has been successfully updated!";
 "password_update_error_message" = "Password update error.";
+
+"user_email_notfound_message" = "The user with this email address was not found.";
+
+"invalid_recovery_code" = "Invalid recovery code.";
+"password_update_error" = "Password update error. Try again later.";
+"invalid_URL_error" = "Invalid URL for sending email.";
+"code_sent_email_message" = "The code has been sent by email.";
+"sending_email_error" = "Error when sending email";
+"user_already_exists_message" = "The user with this email already exists.";
+"database_later_message" = "Database access error. Try again later.";
+
+"pls_enter_valid_email" = "Please enter a valid email address.";
+"pls_accept_term" = "Please accept the terms.";

@@ -54,13 +54,13 @@ final class ResetPasswordInteractor: ResetPasswordBusinessLogic {
         let storedCode = UserDefaults.standard.string(forKey: "ResetCode_\(request.email)")
         
         guard storedCode == request.code else {
-            let response = ResetPassword.Response(success: false, errorMessage: "Неверный код восстановления.")
+            let response = ResetPassword.Response(success: false, errorMessage: "invalid_recovery_code".localized)
             presenter?.presentResetPassword(response: response)
             return
         }
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            let response = ResetPassword.Response(success: false, errorMessage: "Ошибка приложения")
+            let response = ResetPassword.Response(success: false, errorMessage: "error_app".localized)
             presenter?.presentResetPassword(response: response)
             return
         }
@@ -78,11 +78,11 @@ final class ResetPasswordInteractor: ResetPasswordBusinessLogic {
                 let response = ResetPassword.Response(success: true, errorMessage: nil)
                 presenter?.presentResetPassword(response: response)
             } else {
-                let response = ResetPassword.Response(success: false, errorMessage: "Пользователь не найден.")
+                let response = ResetPassword.Response(success: false, errorMessage: "usernotfound".localized)
                 presenter?.presentResetPassword(response: response)
             }
         } catch {
-            let response = ResetPassword.Response(success: false, errorMessage: "Ошибка обновления пароля. Попробуйте позже.")
+            let response = ResetPassword.Response(success: false, errorMessage: "password_update_error".localized)
             presenter?.presentResetPassword(response: response)
         }
     }

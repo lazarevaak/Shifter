@@ -3,8 +3,10 @@ import CoreData
 import os.log
 import Foundation
 
+// MARK: - Models
+
 enum SetDetails {
-    // MARK: Fetch Cards
+    // MARK: Fetch Cards Models
     enum FetchCards {
         struct Request { }
         struct Response {
@@ -16,7 +18,7 @@ enum SetDetails {
         }
     }
     
-    // MARK: Update Progress
+    // MARK: Update Progress Models
     enum UpdateProgress {
         struct Request { }
         struct Response {
@@ -28,38 +30,41 @@ enum SetDetails {
     }
 }
 
+// MARK: - Protocols
 
+// MARK: Business Logic Protocol
 protocol SetDetailsBusinessLogic {
     func fetchCards(request: SetDetails.FetchCards.Request)
     func updateProgress(request: SetDetails.UpdateProgress.Request)
     func toggleLearned(for index: Int)
 }
 
-
+// MARK: Display Logic Protocol
 protocol SetDetailsDisplayLogic: AnyObject {
     func displayFetchedCards(viewModel: SetDetails.FetchCards.ViewModel)
     func displayUpdatedProgress(viewModel: SetDetails.UpdateProgress.ViewModel)
 }
 
+// MARK: Routing Logic Protocol
 protocol SetDetailsRoutingLogic {
     func dismiss()
 }
 
-
-// MARK: - Presentation Logic
+// MARK: Presentation Logic Protocol
 protocol SetDetailsPresentationLogic {
     func presentFetchedCards(response: SetDetails.FetchCards.Response)
     func presentUpdatedProgress(response: SetDetails.UpdateProgress.Response)
 }
 
-class SetDetailsInteractor: NSObject, SetDetailsBusinessLogic {
-    
+// MARK: - Interactor
+
+final class SetDetailsInteractor: NSObject, SetDetailsBusinessLogic {
+    // MARK: Properties
     var presenter: SetDetailsPresentationLogic?
-    weak var viewController: SetDetailsDisplayLogic?
-    
     var cardSet: CardSet
     var context: NSManagedObjectContext
     
+    // MARK: - Fetched Results Controller
     private lazy var fetchedResultsController: NSFetchedResultsController<Card> = {
         let fetchRequest: NSFetchRequest<Card> = Card.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "set == %@", cardSet)
@@ -73,12 +78,14 @@ class SetDetailsInteractor: NSObject, SetDetailsBusinessLogic {
         return frc
     }()
     
+    // MARK: - Initializer
     init(cardSet: CardSet, context: NSManagedObjectContext) {
         self.cardSet = cardSet
         self.context = context
         super.init()
     }
     
+    // MARK: Fetch Cards
     func fetchCards(request: SetDetails.FetchCards.Request) {
         do {
             try fetchedResultsController.performFetch()
@@ -86,10 +93,11 @@ class SetDetailsInteractor: NSObject, SetDetailsBusinessLogic {
             let response = SetDetails.FetchCards.Response(cards: cards)
             presenter?.presentFetchedCards(response: response)
         } catch {
-            os_log("Ошибка загрузки карточек: %{public}@", type: .error, error.localizedDescription)
+            os_log("Failed to fetch cards: %{public}@", type: .error, error.localizedDescription)
         }
     }
     
+    // MARK: Update Progress
     func updateProgress(request: SetDetails.UpdateProgress.Request) {
         let cards = fetchedResultsController.fetchedObjects ?? []
         let total = cards.count
@@ -99,12 +107,13 @@ class SetDetailsInteractor: NSObject, SetDetailsBusinessLogic {
         do {
             try context.save()
         } catch {
-            os_log("Ошибка сохранения прогресса: %{public}@", type: .error, error.localizedDescription)
+            os_log("Failed to save progress: %{public}@", type: .error, error.localizedDescription)
         }
         let response = SetDetails.UpdateProgress.Response(progressPercent: progressPercent)
         presenter?.presentUpdatedProgress(response: response)
     }
     
+    // MARK: Toggle Learned State
     func toggleLearned(for index: Int) {
         guard let cards = fetchedResultsController.fetchedObjects, index < cards.count else { return }
         let card = cards[index]
@@ -112,11 +121,13 @@ class SetDetailsInteractor: NSObject, SetDetailsBusinessLogic {
         do {
             try context.save()
         } catch {
-            os_log("Ошибка сохранения карточки: %{public}@", type: .error, error.localizedDescription)
+            os_log("Failed to save card state: %{public}@", type: .error, error.localizedDescription)
         }
         updateProgress(request: SetDetails.UpdateProgress.Request())
     }
 }
+
+// MARK: - NSFetchedResultsControllerDelegate
 
 extension SetDetailsInteractor: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {

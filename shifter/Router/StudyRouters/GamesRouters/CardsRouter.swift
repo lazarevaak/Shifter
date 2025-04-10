@@ -1,7 +1,6 @@
 import UIKit
 
 // MARK: - Router
-
 final class CardsRouter {
     
     // MARK: - Properties
@@ -14,7 +13,6 @@ final class CardsRouter {
             rightScore: rightScore,
             progress: progress
         ) { [weak self] in
-            // после закрытия экрана результатов просто закрываем тестовый экран
             self?.viewController?.dismiss(animated: true, completion: nil)
         }
         viewController?.present(resultsVC, animated: true, completion: nil)

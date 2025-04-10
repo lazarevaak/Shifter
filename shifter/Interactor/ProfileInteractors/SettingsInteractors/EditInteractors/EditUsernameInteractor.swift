@@ -18,6 +18,8 @@ enum EditUsernameModels {
     }
 }
 
+// MARK: - Protocols
+
 // MARK: - Business Logic
 
 protocol EditUsernameBusinessLogic {

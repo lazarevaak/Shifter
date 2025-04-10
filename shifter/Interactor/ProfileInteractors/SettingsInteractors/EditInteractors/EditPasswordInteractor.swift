@@ -18,6 +18,8 @@ enum EditPasswordModels {
     }
 }
 
+// MARK: - Protocols
+
 // MARK: - Business Logic
 
 protocol EditPasswordBusinessLogic {

@@ -30,7 +30,7 @@ final class EditPasswordViewController: UIViewController, EditPasswordDisplayLog
     
     private lazy var confirmNewPasswordTextField: UITextField = {
         let tf = UITextField()
-        tf.placeholder = "confirm_new_password_placeholder".localized  // ключ в локализации
+        tf.placeholder = "confirm_new_password_placeholder".localized 
         tf.borderStyle = .roundedRect
         tf.isSecureTextEntry = true
         tf.translatesAutoresizingMaskIntoConstraints = false
@@ -39,7 +39,7 @@ final class EditPasswordViewController: UIViewController, EditPasswordDisplayLog
     
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("save_button_title".localized, for: .normal)  // ключ в локализации
+        button.setTitle("save_button_title".localized, for: .normal)
         button.setTitleColor(ColorsLayoutConstants.buttonTextColor, for: .normal)
         button.backgroundColor = ColorsLayoutConstants.basicColor
         button.layer.cornerRadius = 8
@@ -87,22 +87,22 @@ final class EditPasswordViewController: UIViewController, EditPasswordDisplayLog
         view.addSubview(saveButton)
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -SizeLayoutConstants.editConstaintSize),
             
-            newPasswordTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            newPasswordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            newPasswordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            newPasswordTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            newPasswordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            newPasswordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -SizeLayoutConstants.editConstaintSize),
             
             confirmNewPasswordTextField.topAnchor.constraint(equalTo: newPasswordTextField.bottomAnchor, constant: 12),
             confirmNewPasswordTextField.leadingAnchor.constraint(equalTo: newPasswordTextField.leadingAnchor),
             confirmNewPasswordTextField.trailingAnchor.constraint(equalTo: newPasswordTextField.trailingAnchor),
             
-            saveButton.topAnchor.constraint(equalTo: confirmNewPasswordTextField.bottomAnchor, constant: 20),
-            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            saveButton.heightAnchor.constraint(equalToConstant: 44)
+            saveButton.topAnchor.constraint(equalTo: confirmNewPasswordTextField.bottomAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -SizeLayoutConstants.editConstaintSize),
+            saveButton.heightAnchor.constraint(equalToConstant: SizeLayoutConstants.editHeightAnchorSize)
         ])
     }
     
@@ -128,7 +128,7 @@ final class EditPasswordViewController: UIViewController, EditPasswordDisplayLog
         let alert = UIAlertController(title: "error_alert_title".localized,
                                       message: message,
                                       preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "ok_button_title".localized, style: .default))
+        alert.addAction(UIAlertAction(title: "ОК", style: .default))
         present(alert, animated: true)
     }
     

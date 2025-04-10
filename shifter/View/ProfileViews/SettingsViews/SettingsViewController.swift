@@ -35,7 +35,7 @@ final class SettingsViewController: UIViewController, SettingsDisplayLogic, UITe
         let label = UILabel()
         // Локализованный заголовок экрана настроек
         label.text = "settings_title".localized
-        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.font = UIFont.boldSystemFont(ofSize: SizeLayoutConstants.overlayLabelSize)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -290,7 +290,7 @@ final class SettingsViewController: UIViewController, SettingsDisplayLogic, UITe
     // MARK: - Alert Helper
     private func showAlert(message: String, title: String = "alert_default_title".localized, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let ok = UIAlertAction(title: "ok_button_title".localized, style: .default) { _ in completion?() }
+        let ok = UIAlertAction(title: "ОК", style: .default) { _ in completion?() }
         alert.addAction(ok)
         present(alert, animated: true)
     }

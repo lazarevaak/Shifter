@@ -47,7 +47,7 @@ protocol SettingsDisplayLogic: AnyObject {
     func displayUpdateLanguageResult(viewModel: Settings.ViewModel)
 }
 
-// MARK: - Протоколы подтверждения и обновления
+// MARK: - Confirmation and update protocols
 
 protocol ConfirmActionDelegate: AnyObject {
     func didConfirmAction(withPassword input: String)

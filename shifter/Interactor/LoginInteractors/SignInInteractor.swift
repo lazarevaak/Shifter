@@ -56,7 +56,7 @@ final class SignInInteractor: SignInBusinessLogic {
             let response = SignIn.Response(
                 success: false,
                 user: nil,
-                errorMessage: "Ошибка приложения"
+                errorMessage: "error_app".localized
             )
             presenter?.presentSignIn(response: response)
             return
@@ -81,7 +81,7 @@ final class SignInInteractor: SignInBusinessLogic {
                     let response = SignIn.Response(
                         success: false,
                         user: nil,
-                        errorMessage: "Неверный пароль."
+                        errorMessage: "incorrect_password".localized
                     )
                     presenter?.presentSignIn(response: response)
                 }
@@ -89,7 +89,7 @@ final class SignInInteractor: SignInBusinessLogic {
                 let response = SignIn.Response(
                     success: false,
                     user: nil,
-                    errorMessage: "Пользователь не найден."
+                    errorMessage: "usernotfound".localized
                 )
                 presenter?.presentSignIn(response: response)
             }
@@ -97,7 +97,7 @@ final class SignInInteractor: SignInBusinessLogic {
             let response = SignIn.Response(
                 success: false,
                 user: nil,
-                errorMessage: "Ошибка доступа к данным."
+                errorMessage: "error_dataaccess".localized
             )
             presenter?.presentSignIn(response: response)
         }

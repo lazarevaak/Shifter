@@ -7,7 +7,6 @@ final class ForgotPasswordViewController: UIViewController, ForgotPasswordDispla
     var router: ForgotPasswordRoutingLogic?
     
     // MARK: - UI Elements
-    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Password Recovery"
@@ -55,7 +54,6 @@ final class ForgotPasswordViewController: UIViewController, ForgotPasswordDispla
     }()
     
     // MARK: - Life Cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = ColorsLayoutConstants.backgroundColor
@@ -134,20 +132,18 @@ final class ForgotPasswordViewController: UIViewController, ForgotPasswordDispla
     }
     
     // MARK: - Actions Setup
-    
     private func setupActions() {
         sendCodeButton.addTarget(self, action: #selector(sendResetCodeButtonTapped), for: .touchUpInside)
     }
     
     // MARK: - Button Actions
-    
     @objc private func backButtonPressed() {
         navigationController?.popViewController(animated: true)
     }
     
     @objc private func sendResetCodeButtonTapped() {
         guard let email = emailTextField.text, !email.isEmpty else {
-            showAlert(message: "Пожалуйста, введите ваш email.")
+            showAlert(message: "plsenter_email_label".localized)
             return
         }
         let request = ForgotPassword.Request(email: email)
@@ -155,7 +151,6 @@ final class ForgotPasswordViewController: UIViewController, ForgotPasswordDispla
     }
     
     // MARK: - ForgotPasswordDisplayLogic
-    
     func displayForgotPassword(viewModel: ForgotPassword.ViewModel) {
         showAlert(message: viewModel.message, title: viewModel.success ? "success_alert_title".localized : "error_alert_title".localized) {
             if viewModel.success, let email = self.emailTextField.text {
@@ -165,7 +160,7 @@ final class ForgotPasswordViewController: UIViewController, ForgotPasswordDispla
     }
     
     // MARK: - Alert Helper
-    private func showAlert(message: String, title: String = "Внимание", completion: (() -> Void)? = nil) {
+    private func showAlert(message: String, title: String = "Attention", completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: "OK", style: .default) { _ in completion?() }
         alert.addAction(ok)

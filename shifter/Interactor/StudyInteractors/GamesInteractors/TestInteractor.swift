@@ -2,6 +2,8 @@ import UIKit
 import CoreData
 import Foundation
 
+// MARK: - Models
+
 enum TestModels {
     struct TestRequest { }
     
@@ -46,12 +48,15 @@ enum TestModels {
     }
 }
 
+// MARK: - Protocols
+
+// MARK: - Business Logic
 protocol TestBusinessLogic: AnyObject {
     func viewDidLoad(request: TestModels.TestRequest)
     func checkAnswer(request: TestModels.CheckAnswerRequest)
 }
 
-// MARK: - Routing Protocol
+// MARK: - Routing Logic
 protocol TestRoutingLogic {
     func routeToResults(correctAnswers: Int, total: Int)
 }
@@ -60,6 +65,12 @@ protocol TestRoutingLogic {
 protocol TestPresentationLogic: AnyObject {
     func presentTest(response: TestModels.TestResponse)
     func presentAnswer(response: TestModels.CheckAnswerResponse)
+}
+
+// MARK: - Display Logic
+protocol TestDisplayLogic: AnyObject {
+    func displayTest(viewModel: TestModels.TestViewModel)
+    func displayAnswer(viewModel: TestModels.CheckAnswerViewModel)
 }
 
 // MARK: - Interactor
@@ -71,6 +82,7 @@ final class TestInteractor: TestBusinessLogic {
     var correctAnswers = 0
     var incorrectAnswers = 0
     
+    // MARK: - Init
     init(cardSet: CardSet?) {
         self.cardSet = cardSet
         if let set = cardSet, let cardObjects = set.cards?.allObjects as? [Card] {

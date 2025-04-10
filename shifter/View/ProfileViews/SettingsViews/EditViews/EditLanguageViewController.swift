@@ -8,11 +8,10 @@ final class EditLanguageViewController: UIViewController, EditLanguageDisplayLog
     var router: EditLanguageRoutingLogic?
     
     private var currentLanguage: String
-    // Используем параметр languages для инициализации; если параметр не передан – берем значение по умолчанию.
     private let languages: [String: String]
-    // Массив кодов локалей для работы с UIPickerView
+    
     private var languageCodes: [String] {
-        return Array(languages.keys).sorted()  // Сортировка по алфавиту или нужному порядку
+        return Array(languages.keys).sorted()
     }
     
     // MARK: - UI Elements
@@ -83,15 +82,15 @@ final class EditLanguageViewController: UIViewController, EditLanguageDisplayLog
         view.addSubview(saveButton)
         
         NSLayoutConstraint.activate([
-            pickerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            pickerView.topAnchor.constraint(equalTo: view.topAnchor, constant: SizeLayoutConstants.editConstaintSize),
             pickerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             pickerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             pickerView.heightAnchor.constraint(equalToConstant: 150),
             
-            saveButton.topAnchor.constraint(equalTo: pickerView.bottomAnchor, constant: 20),
-            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            saveButton.heightAnchor.constraint(equalToConstant: 44)
+            saveButton.topAnchor.constraint(equalTo: pickerView.bottomAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: SizeLayoutConstants.editConstaintSize),
+            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -SizeLayoutConstants.editConstaintSize),
+            saveButton.heightAnchor.constraint(equalToConstant: SizeLayoutConstants.editHeightAnchorSize)
         ])
     }
     
@@ -114,7 +113,7 @@ final class EditLanguageViewController: UIViewController, EditLanguageDisplayLog
             let alert = UIAlertController(title: "error_alert_title".localized,
                                           message: viewModel.message,
                                           preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "ok_button_title".localized, style: .default))
+            alert.addAction(UIAlertAction(title: "ОК", style: .default))
             present(alert, animated: true)
         }
     }

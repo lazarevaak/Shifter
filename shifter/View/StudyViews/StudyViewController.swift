@@ -2,8 +2,7 @@ import UIKit
 import CoreData
 import os.log
 
-// MARK: - StudyViewController
-
+// MARK: - ViewController
 final class StudyViewController: UIViewController, StudyDisplayLogic {
 
     // MARK: - VIP Properties
@@ -80,7 +79,6 @@ final class StudyViewController: UIViewController, StudyDisplayLogic {
 }
 
 // MARK: - UITableViewDataSource & UITableViewDelegate
-
 extension StudyViewController: UITableViewDataSource, UITableViewDelegate {
 
     // MARK: - UITableViewDataSource
@@ -97,7 +95,7 @@ extension StudyViewController: UITableViewDataSource, UITableViewDelegate {
         if let image = UIImage(systemName: item.iconName)?
             .withTintColor(ColorsLayoutConstants.basicColor, renderingMode: .alwaysOriginal) {
             config.image = image
-            config.imageProperties.reservedLayoutSize = CGSize(width: 40, height: 40)
+            config.imageProperties.reservedLayoutSize = CGSize(width: SizeLayoutConstants.reservedLayoutSize, height: SizeLayoutConstants.reservedLayoutSize)
         }
         config.text = item.title
         config.textProperties.color = ColorsLayoutConstants.specialTextColor

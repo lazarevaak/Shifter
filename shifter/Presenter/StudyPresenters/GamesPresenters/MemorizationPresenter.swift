@@ -1,7 +1,6 @@
 import Foundation
 import UIKit
 
-
 // MARK: - Presenter
 final class MemorizationPresenter: MemorizationPresentationLogic {
 

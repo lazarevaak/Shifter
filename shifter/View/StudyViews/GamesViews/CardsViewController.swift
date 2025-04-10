@@ -1,7 +1,6 @@
 import UIKit
 
-// MARK: - Cards ViewController
-
+// MARK: - ViewController
 final class CardsViewController: UIViewController, CardsDisplayLogic {
     var interactor: CardsBusinessLogic?
     var router: CardsRouter?
@@ -16,7 +15,6 @@ final class CardsViewController: UIViewController, CardsDisplayLogic {
     private var isFrontSide = true
     
     // MARK: - UI Elements
-    
     private let closeButton: UIButton = {
         let button = UIButton(type: .system)
         let image = UIImage(systemName: "xmark")?
@@ -30,7 +28,7 @@ final class CardsViewController: UIViewController, CardsDisplayLogic {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "cards_label".localized
-        label.font = UIFont.boldSystemFont(ofSize: 22)
+        label.font = UIFont.boldSystemFont(ofSize: SizeLayoutConstants.testTextSize)
         label.textColor = ColorsLayoutConstants.baseTextColor
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -53,28 +51,29 @@ final class CardsViewController: UIViewController, CardsDisplayLogic {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+
     
     private let leftScoreLabel: UILabel = {
         let label = UILabel()
         label.text = "0"
-        label.font = UIFont.boldSystemFont(ofSize: SizeLayoutConstants.textFieldFontSize)
         label.textColor = ColorsLayoutConstants.buttonTextColor
         label.backgroundColor = ColorsLayoutConstants.basicColor
         label.textAlignment = .center
-        label.layer.cornerRadius = 16
-        label.clipsToBounds = true
+        label.font = UIFont.systemFont(ofSize: SizeLayoutConstants.instructionFontSize, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.layer.cornerRadius = MemorizationConstants.cardLabelSize / 2
+        label.layer.masksToBounds = true
         return label
     }()
     
     private let rightScoreLabel: UILabel = {
         let label = UILabel()
         label.text = "0"
-        label.font = UIFont.boldSystemFont(ofSize: SizeLayoutConstants.textFieldFontSize)
+        label.font = UIFont.systemFont(ofSize: SizeLayoutConstants.instructionFontSize, weight: .bold)
         label.textColor = ColorsLayoutConstants.buttonTextColor
         label.backgroundColor = ColorsLayoutConstants.buttonColor
         label.textAlignment = .center
-        label.layer.cornerRadius = 16
+        label.layer.cornerRadius = MemorizationConstants.cardLabelSize / 2
         label.clipsToBounds = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -91,7 +90,7 @@ final class CardsViewController: UIViewController, CardsDisplayLogic {
     
     private let cardLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: SizeLayoutConstants.cardLabelSize, weight: .medium)
         label.textColor = ColorsLayoutConstants.specialTextColor
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -102,7 +101,7 @@ final class CardsViewController: UIViewController, CardsDisplayLogic {
     private let leftOverlayLabel: UILabel = {
         let label = UILabel()
         label.text = "stillstudying_label".localized
-        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.font = UIFont.boldSystemFont(ofSize: SizeLayoutConstants.overlayLabelSize)
         label.textColor = ColorsLayoutConstants.basicColor
         label.textAlignment = .center
         label.alpha = 0
@@ -112,8 +111,8 @@ final class CardsViewController: UIViewController, CardsDisplayLogic {
     
     private let rightOverlayLabel: UILabel = {
         let label = UILabel()
-        label.text = "studied_label".localized
-        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.text = "studing_label".localized
+        label.font = UIFont.boldSystemFont(ofSize: SizeLayoutConstants.overlayLabelSize)
         label.textColor = ColorsLayoutConstants.elementsColor
         label.textAlignment = .center
         label.alpha = 0
@@ -184,41 +183,41 @@ final class CardsViewController: UIViewController, CardsDisplayLogic {
         cardView.addSubview(rightOverlayLabel)
         
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            closeButton.widthAnchor.constraint(equalToConstant: 30),
-            closeButton.heightAnchor.constraint(equalToConstant: 30),
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: CardsLayoutConstants.closeButtonTop),
+            closeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CardsLayoutConstants.closeButtonLeading),
+            closeButton.widthAnchor.constraint(equalToConstant: CardsLayoutConstants.closeButtonSize),
+            closeButton.heightAnchor.constraint(equalToConstant: CardsLayoutConstants.closeButtonSize),
             
             titleLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            separatorLine.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 8),
+            separatorLine.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: CardsLayoutConstants.closeButtonTop),
             separatorLine.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             separatorLine.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            separatorLine.heightAnchor.constraint(equalToConstant: 1),
+            separatorLine.heightAnchor.constraint(equalToConstant: CardsLayoutConstants.separatorHeight),
             
-            leftScoreLabel.topAnchor.constraint(equalTo: separatorLine.bottomAnchor, constant: 8),
-            leftScoreLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            leftScoreLabel.widthAnchor.constraint(equalToConstant: 40),
-            leftScoreLabel.heightAnchor.constraint(equalToConstant: 32),
+            leftScoreLabel.topAnchor.constraint(equalTo: separatorLine.bottomAnchor, constant: CardsLayoutConstants.closeButtonTop),
+            leftScoreLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CardsLayoutConstants.closeButtonLeading),
+            leftScoreLabel.widthAnchor.constraint(equalToConstant: MemorizationConstants.cardLabelSize),
+            leftScoreLabel.heightAnchor.constraint(equalToConstant: MemorizationConstants.cardLabelSize),
             
-            counterLabel.topAnchor.constraint(equalTo: separatorLine.bottomAnchor, constant: 8),
+            counterLabel.topAnchor.constraint(equalTo: separatorLine.bottomAnchor, constant: CardsLayoutConstants.closeButtonTop),
             counterLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            rightScoreLabel.topAnchor.constraint(equalTo: separatorLine.bottomAnchor, constant: 8),
-            rightScoreLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            rightScoreLabel.widthAnchor.constraint(equalToConstant: 40),
-            rightScoreLabel.heightAnchor.constraint(equalToConstant: 32),
+            rightScoreLabel.topAnchor.constraint(equalTo: separatorLine.bottomAnchor, constant: CardsLayoutConstants.closeButtonTop),
+            rightScoreLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -CardsLayoutConstants.closeButtonLeading),
+            rightScoreLabel.widthAnchor.constraint(equalToConstant: MemorizationConstants.cardLabelSize),
+            rightScoreLabel.heightAnchor.constraint(equalToConstant: MemorizationConstants.cardLabelSize),
             
             cardView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            cardView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 20),
-            cardView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.75),
-            cardView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.55),
+            cardView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: CardsLayoutConstants.cardLabelHorizontalPadding),
+            cardView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: CardsLayoutConstants.cardViewWidthMultiplier),
+            cardView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: CardsLayoutConstants.cardViewHeightMultiplier),
             
             cardLabel.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
             cardLabel.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),
-            cardLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
-            cardLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
+            cardLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: CardsLayoutConstants.cardLabelHorizontalPadding),
+            cardLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -CardsLayoutConstants.cardLabelHorizontalPadding),
             
             leftOverlayLabel.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
             leftOverlayLabel.centerYAnchor.constraint(equalTo: cardView.centerYAnchor),
@@ -249,7 +248,7 @@ final class CardsViewController: UIViewController, CardsDisplayLogic {
         
         switch gesture.state {
         case .began:
-            UIView.animate(withDuration: 0.1) {
+            UIView.animate(withDuration: CardsLayoutConstants.panFadeDuration) {
                 self.cardLabel.alpha = 0
             }
         case .changed:
@@ -257,7 +256,7 @@ final class CardsViewController: UIViewController, CardsDisplayLogic {
                 x: view.center.x + translation.x,
                 y: view.center.y + translation.y
             )
-            let threshold: CGFloat = 120
+            let threshold: CGFloat = CardsLayoutConstants.overlayThreshold
             let ratio = min(1, abs(offsetX) / threshold)
             if offsetX < 0 {
                 leftOverlayLabel.alpha = ratio
@@ -270,16 +269,16 @@ final class CardsViewController: UIViewController, CardsDisplayLogic {
                 rightOverlayLabel.alpha = 0
             }
         case .ended:
-            if offsetX < -100 {
+            if offsetX < -CardsLayoutConstants.swipeThreshold {
                 leftScore += 1
                 interactor?.updateLearnedStatus(request: CardsModels.UpdateLearnedStatusRequest(isLearned: false))
                 animateCardExit(direction: .left)
-            } else if offsetX > 100 {
+            } else if offsetX > CardsLayoutConstants.swipeThreshold {
                 rightScore += 1
                 interactor?.updateLearnedStatus(request: CardsModels.UpdateLearnedStatusRequest(isLearned: true))
                 animateCardExit(direction: .right)
             } else {
-                UIView.animate(withDuration: 0.3) {
+                UIView.animate(withDuration: CardsLayoutConstants.exitAnimationDuration) {
                     self.cardView.center = self.view.center
                     self.leftOverlayLabel.alpha = 0
                     self.rightOverlayLabel.alpha = 0
@@ -297,13 +296,13 @@ final class CardsViewController: UIViewController, CardsDisplayLogic {
     
     @objc private func updateLocalizedTexts() {
         leftOverlayLabel.text = "stillstudying_label".localized
-        rightOverlayLabel.text = "studied_label".localized
+        rightOverlayLabel.text = "studing_label".localized
         titleLabel.text = "cards_label".localized
     }
     
     private func flipCard() {
         UIView.transition(with: cardView,
-                          duration: 0.4,
+                          duration: CardsLayoutConstants.flipAnimationDuration,
                           options: .transitionFlipFromRight,
                           animations: {
             self.cardLabel.text = self.isFrontSide ?
@@ -355,7 +354,7 @@ final class CardsViewController: UIViewController, CardsDisplayLogic {
                 self.cardLabel.text = flashcardVM.question
                 self.isFrontSide = true
             } else {
-                self.cardLabel.text = "Нет карточек"
+                self.cardLabel.text = ""
             }
         }
     }

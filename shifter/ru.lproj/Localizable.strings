@@ -84,11 +84,17 @@
 "study_label" = "Изучить";
 "learned_label" = " Изучена";
 
+"del_set_message" = "Удалить Набор";
+"sure_del_set_message" = "Вы уверены, что хотите удалить этот набор?";
+
+"del_card_message" = "Удалить Карточку";
+"sure_del_card_message" = "Вы уверены, что хотите удалить эту карточку?";
+
 "sets_label" = "Наборы";
 "search_label" = "Поиск";
 
 "stillstudying_label" = "Ещё изучаю";
-"studied_label" = "Знаю";
+"studing_label" = "Знаю";
 
 "cards_label" = "Карточки";
 "memorization_label" = "Запоминание";
@@ -156,3 +162,16 @@
 "error_occurred_message" = "Произошла ошибка";
 "password_success_update_message" = "Пароль успешно обновлён!";
 "password_update_error_message" = "Ошибка обновления пароля.";
+
+"user_email_notfound_message" = "Пользователь с таким email не найден.";
+
+"invalid_recovery_code" = "Неверный код восстановления.";
+"password_update_error" = "Ошибка обновления пароля. Попробуйте позже.";
+"invalid_URL_error" = "Неверный URL для отправки email.";
+"code_sent_email_message" = "Код отправлен на email.";
+"sending_email_error" = "Ошибка при отправке email";
+"user_already_exists_message" = "Пользователь с таким email уже существует.";
+"database_later_message" = "Ошибка доступа к базе. Попробуйте позже.";
+
+"pls_enter_valid_email" = "Пожалуйста, введите действительный адрес электронной почты.";
+"pls_accept_term" = "Пожалуйста, примите эти условия.";

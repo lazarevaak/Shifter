@@ -128,7 +128,7 @@ final class ConfirmActionViewController: UIViewController, ConfirmActionDisplayL
                 preferredStyle: .alert
             )
             alert.addAction(UIAlertAction(
-                title: "ok_button_title".localized,
+                title: "ОК",
                 style: .default)
             )
             present(alert, animated: true)

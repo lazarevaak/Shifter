@@ -1,13 +1,6 @@
 import UIKit
 import CoreData
 
-protocol MemorizationDisplayLogic: AnyObject {
-    func displayCards(viewModel: Memorization.LoadCards.ViewModel)
-    func displayOptionResult(viewModel: Memorization.LoadCards.ViewModel, isCorrect: Bool)
-    func displayError(message: String)
-    func displayFinishAlert(message: String)
-}
-
 final class MemorizationViewController: UIViewController, MemorizationDisplayLogic {
     
     // MARK: - Clean Swift VIP Свойства
@@ -39,7 +32,7 @@ final class MemorizationViewController: UIViewController, MemorizationDisplayLog
         let label = UILabel()
         label.text = "memorization_label".localized
         label.tintColor = ColorsLayoutConstants.specialTextColor
-        label.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: SizeLayoutConstants.testTextSize, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         return label
@@ -97,7 +90,7 @@ final class MemorizationViewController: UIViewController, MemorizationDisplayLog
     private let questionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 22, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: SizeLayoutConstants.testTextSize, weight: .medium)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -116,7 +109,6 @@ final class MemorizationViewController: UIViewController, MemorizationDisplayLog
     
     private var optionButtons: [UIButton] = []
     
-    // Для всплывающего окна при долгом нажатии
     private var longPressOverlay: UIView?
     
     // MARK: - Инициализация
@@ -168,7 +160,6 @@ final class MemorizationViewController: UIViewController, MemorizationDisplayLog
         interactor.cardSet = self.cardSet
     }
 
-    
     // MARK: - Layout (UI-элементы остаются без изменений)
     private func setupLayout() {
         view.addSubview(topBar)
@@ -247,7 +238,6 @@ final class MemorizationViewController: UIViewController, MemorizationDisplayLog
     }
     
     @objc private func optionButtonTapped(_ sender: UIButton) {
-        // Сохраняем нажатую кнопку и корректный ответ предыдущей карточки
         self.lastTappedButton = sender
         let request = Memorization.OptionSelected.Request(selectedOption: sender.title(for: .normal) ?? "")
         interactor?.selectOption(request: request)
@@ -286,7 +276,7 @@ final class MemorizationViewController: UIViewController, MemorizationDisplayLog
         
         let label = UILabel()
         label.text = text
-        label.font = UIFont.systemFont(ofSize: 24, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: SizeLayoutConstants.overlayLabelSize, weight: .regular)
         label.textColor = ColorsLayoutConstants.specialTextColor
         label.textAlignment = .center
         label.numberOfLines = 0

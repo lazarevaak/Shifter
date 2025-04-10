@@ -21,6 +21,8 @@ enum EditCard {
     }
 }
 
+// MARK: - Protocols
+
 // MARK: - Business Logic
 protocol EditCardBusinessLogic {
     func updateCard(request: EditCard.UpdateCard.Request)

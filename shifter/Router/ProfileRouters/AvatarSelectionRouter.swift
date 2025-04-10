@@ -1,7 +1,6 @@
 import UIKit
 
 // MARK: - Router
-
 final class AvatarSelectionRouter: AvatarSelectionRoutingLogic {
     
     // MARK: - Properties

@@ -19,6 +19,8 @@ enum CreateSet {
     }
 }
 
+// MARK: - Protocols
+
 // MARK: - Business Logic
 protocol CreateSetBusinessLogic {
     func createSet(request: CreateSet.Request)
@@ -69,7 +71,7 @@ final class CreateSetInteractor: CreateSetBusinessLogic {
                 }
             }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 60, execute: timeoutWorkItem)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 30, execute: timeoutWorkItem)
         
         generateFlashcards(from: request.text) { flashcards in
             DispatchQueue.main.async {
@@ -110,6 +112,7 @@ final class CreateSetInteractor: CreateSetBusinessLogic {
         }
     }
     
+    // MARK: - Private Methods
     private func generateFlashcards(from text: String, completion: @escaping ([[String: String]]) -> Void) {
         let prompt = """
         На основе данного текста, создай не более 10 карточек для изучения.

@@ -13,8 +13,12 @@
 			</array>
 		</dict>
 	</array>
+	<key>UISupportedInterfaceOrientations</key>
+		<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		</array>
 	<key>OpenRouterAPIKey</key>
-	<string>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</string>
+	<string>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</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
